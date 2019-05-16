@@ -1,5 +1,5 @@
 # Objetivo:
-O objetivo deste desafio é permitir uma melhor avaliação das suas habilidades como candidato à vaga de Data Scientist. Este desafio deve ser feito individualmente.
+O objetivo deste desafio é permitir uma melhor avaliação das suas habilidades como candidato a vaga de Data Scientist. Este desafio deve ser feito individualmente.
 
 # Instruções:
 Primeiro, faça um fork deste projeto para sua conta no Github (crie uma se você não possuir). Em seguida, implemente o projeto tal qual descrito abaixo, em seu próprio fork. Por fim, faça Push de todas as suas alterações para o seu fork no Github e envie um pull request para este repositório original.
