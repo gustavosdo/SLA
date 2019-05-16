@@ -15,16 +15,16 @@ O SLA no instante t é calculado pelo numero de chamados fechados dentro do mês
 O desafio proposto é gerar um modelo preditivo que possa informar a percentagem de SLA no mês para cada cliente.  
 Os dados fornecidos são de 01 de Janeiro de 2019 até 26 de Fevereiro de 2019. O modelo deve então prever qual será o SLA do dia 28 de Fevereiro (final do mês).
 
-Considerações:
+  ## Considerações:
   * Para identificar qual  ticket ja foi fechado , usa-se a coluna “callStatus”, onde os status fechados são: N0, N4 e CV.
   * Para identificar quais tickets foram fechados dentro ou fora do SLA , usa-se a coluna “onTimeSolution”(S = foi fechado dentro e N = não foi fechado dentro)
 
-Serão avaliados:
+  ## Serão avaliados:
   * Algoritmo utilizado
   * Acuracidade do modelo: métricas utilizadas
   * Organização do código( será avaliado no GIT)
   * Visualizações geradas
 
-Extras (não obrigatório):
+  ## Extras (não obrigatório):
   * Outros insights baseados nos dados fornecidos.
   * Exposição do modelo através de API (kubernetes ou IBM Cloud)
