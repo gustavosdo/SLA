@@ -35,5 +35,12 @@ listCustomerCodes = getUniqueValuesList(allCustomerCodes) # output: ['215', '258
 #listCallStatus_900102 = getUniqueValuesList(dataset_900102_callStatus)
 #print(listCallStatus_900102)
 
+#for customer in listCustomerCodes:
+	#print(dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == customer].values)
 
+closeDateTime = dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == '215'].values
+callCloseDate = dataset_closedTickets['callCloseDate'][dataset_closedTickets.customerCode == '215'].values
+callCloseTime = dataset_closedTickets['callCloseTime'][dataset_closedTickets.customerCode == '215'].values
 
+for i in range(0,100):
+	print(closeDateTime[i], callCloseDate[i], callCloseTime[i])
