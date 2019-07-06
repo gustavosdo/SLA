@@ -2,10 +2,9 @@
 
 '''
 Opens the ticket_cientista.csv file,
-selects the closed tickets, gets the
-customerCodes of all closed tickets
-and make plots of SLA(t) for each
-customer.
+selects the closed tickets, convert
+the timestamp of each ticket to UTC
+and saves in a new csv file
 
 @author: gustavo.if.ufrj@gmail.com
 '''
@@ -38,9 +37,21 @@ listCustomerCodes = getUniqueValuesList(allCustomerCodes) # output: ['215', '258
 #for customer in listCustomerCodes:
 	#print(dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == customer].values)
 
-closeDateTime = dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == '215'].values
-callCloseDate = dataset_closedTickets['callCloseDate'][dataset_closedTickets.customerCode == '215'].values
-callCloseTime = dataset_closedTickets['callCloseTime'][dataset_closedTickets.customerCode == '215'].values
+# getting the timezone info
+from datetime import datetime
+import time
+#closeDateTime = dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == '215'].values # list of all closeDateTime (ISODate format with extra chars)
+closeDateTime = dataset_closedTickets['closeDateTime'].values # list of all closeDateTime (ISODate format with extra chars)
+closeDateTime = [string[9:38] for string in closeDateTime] # list of strings of closeDateTime
+closeDateTime = [datetime.fromisoformat(date) for date in closeDateTime] # converting to date object
+closeDateTime = [datetime.utctimetuple(date) for date in closeDateTime] # converting to utc
+closeDateTime = [time.asctime(date) for date in closeDateTime] # convert to asctime
+closeDateTime = [datetime.strptime(date, '%a %b %d %H:%M:%S %Y') for date in closeDateTime] # convert to datetime format
 
-for i in range(0,100):
-	print(closeDateTime[i], callCloseDate[i], callCloseTime[i])
+dataset_closedTickets.loc[:,'closeDateTime'] = closeDateTime # updating the time values in the preselected dataset
+
+print(min(dataset_closedTickets['closeDateTime'].values))
+print(max(dataset_closedTickets['closeDateTime'].values))
+
+
+#### NEED TO SAVE ONLY THE closeDateTime, onTimeSolution AND customerCode COLUMNS TO NEW FILE
