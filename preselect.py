@@ -34,24 +34,22 @@ listCustomerCodes = getUniqueValuesList(allCustomerCodes) # output: ['215', '258
 #listCallStatus_900102 = getUniqueValuesList(dataset_900102_callStatus)
 #print(listCallStatus_900102)
 
-#for customer in listCustomerCodes:
-	#print(dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == customer].values)
-
 # getting the timezone info
 from datetime import datetime
 import time
-#closeDateTime = dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == '215'].values # list of all closeDateTime (ISODate format with extra chars)
+#closeDateTime = dataset_closedTickets['closeDateTime'][dataset_closedTickets.customerCode == '215'].values # list of '215' customerCode closeDateTime list (ISODate format with extra chars)
 closeDateTime = dataset_closedTickets['closeDateTime'].values # list of all closeDateTime (ISODate format with extra chars)
 closeDateTime = [string[9:38] for string in closeDateTime] # list of strings of closeDateTime
 closeDateTime = [datetime.fromisoformat(date) for date in closeDateTime] # converting to date object
 closeDateTime = [datetime.utctimetuple(date) for date in closeDateTime] # converting to utc
 closeDateTime = [time.asctime(date) for date in closeDateTime] # convert to asctime
 closeDateTime = [datetime.strptime(date, '%a %b %d %H:%M:%S %Y') for date in closeDateTime] # convert to datetime format
+closeDateTime = [int(time.mktime(date.timetuple())) for date in closeDateTime]
 
 dataset_closedTickets.loc[:,'closeDateTime'] = closeDateTime # updating the time values in the preselected dataset
 
-print(min(dataset_closedTickets['closeDateTime'].values))
-print(max(dataset_closedTickets['closeDateTime'].values))
+#print(min(dataset_closedTickets['closeDateTime'].values))
+#print(max(dataset_closedTickets['closeDateTime'].values))
 
-
-#### NEED TO SAVE ONLY THE closeDateTime, onTimeSolution AND customerCode COLUMNS TO NEW FILE
+dataset_toSave = dataset_closedTickets[['closeDateTime', 'customerCode', 'onTimeSolution']]
+dataset_toSave.to_csv(r'dataset/ticket_cientista_preselected.csv')
