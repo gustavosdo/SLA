@@ -41,10 +41,10 @@ import time
 closeDateTime = dataset_closedTickets['closeDateTime'].values # list of all closeDateTime (ISODate format with extra chars)
 closeDateTime = [string[9:38] for string in closeDateTime] # list of strings of closeDateTime
 closeDateTime = [datetime.fromisoformat(date) for date in closeDateTime] # converting to date object
-closeDateTime = [datetime.utctimetuple(date) for date in closeDateTime] # converting to utc
-closeDateTime = [time.asctime(date) for date in closeDateTime] # convert to asctime
-closeDateTime = [datetime.strptime(date, '%a %b %d %H:%M:%S %Y') for date in closeDateTime] # convert to datetime format
-closeDateTime = [int(time.mktime(date.timetuple())) for date in closeDateTime]
+closeDateTime = [int(time.mktime(datetime.utctimetuple(date))) for date in closeDateTime] # converting to utc
+#closeDateTime = [time.asctime(date) for date in closeDateTime] # convert to asctime
+#closeDateTime = [datetime.strptime(date, '%a %b %d %H:%M:%S %Y') for date in closeDateTime] # convert to datetime format
+#closeDateTime = [int(time.mktime(date.timetuple())) for date in closeDateTime]
 
 dataset_closedTickets.loc[:,'closeDateTime'] = closeDateTime # updating the time values in the preselected dataset
 
@@ -52,4 +52,5 @@ dataset_closedTickets.loc[:,'closeDateTime'] = closeDateTime # updating the time
 #print(max(dataset_closedTickets['closeDateTime'].values))
 
 dataset_toSave = dataset_closedTickets[['closeDateTime', 'customerCode', 'onTimeSolution']]
+dataset_toSave = dataset_toSave.sort_values(by=['closeDateTime'])
 dataset_toSave.to_csv(r'dataset/ticket_cientista_preselected.csv')
