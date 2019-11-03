@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1572710859546.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3095880745",
+    "id" : "39C13C98",
+    "lastKnownWriteTime" : 1572747142,
+    "last_content_update" : 1572747142,
+    "path" : "~/Dropbox/Git/DataScientistTest/SLA/R/defData.R",
+    "project_path" : "R/defData.R",
+    "properties" : {
+        "cursorPosition" : "11,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

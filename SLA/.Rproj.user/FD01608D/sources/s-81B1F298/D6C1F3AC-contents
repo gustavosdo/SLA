@@ -1,0 +1,11 @@
+
+def_data = function(dataset_filename = NULL){
+
+  # Define filename of dataset
+  if(is.null(dataset_filename)){
+    dataset_filename = readline(prompt = 'Enter filename: ')
+  } else {
+    dataset_filename = dataset_filename
+  }
+  return(read.csv(file = dataset_filename, header = T, sep = ';'))
+}

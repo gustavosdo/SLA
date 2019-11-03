@@ -1,0 +1,10 @@
+Os pacotes a seguir têm dependências desencontradas:
+ r-cran-devtools : Depende: r-api-3.4
+                   Depende: r-cran-httr (>= 0.4) mas não será instalado
+                   Depende: r-cran-memoise (>= 1.0.0) mas não será instalado
+                   Depende: r-cran-whisker mas não será instalado
+                   Depende: r-cran-digest mas não será instalado
+                   Depende: r-cran-rstudioapi (>= 0.2.0) mas não será instalado
+                   Depende: r-cran-jsonlite mas não será instalado
+                   Depende: r-cran-git2r (>= 0.11.0) mas não será instalado
+                   Depende: r-cran-withr mas não será instalad
