@@ -39,5 +39,7 @@ dataInspect = function(){
 
   # How is the time distribution of solved calls?
   solved_calls = dataset[dataset$callStatus %in% c('N0', 'N4', 'CV'),]
-  #hist(dataset$closeDateTime)
+  #closeDateTime = dataset$closeDateTime
+  #closeDateTime[clos]
+  #hist(dataset$closeDateTime, "year", freq = T)
 }
