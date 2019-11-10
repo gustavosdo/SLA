@@ -1,0 +1,10 @@
+Primeira parte: Leitura
+- Selecionar os pedidos fechados, i.e, callStatus = N0, N4 e CV --> pre-selected dataset
+- Obter uma lista com todos os cutomerCode presentes no pre-selected dataset (N clientes)
+- Para cada customerCode calcular o SLA(t, Janeiro) e o SLA(t, Fevereiro)
+  . O customerCode é calculado como SLA(t) = #tickets(S | N0 ou N4 ou CV) / ( #tickets(S | N0 ou N4 ou CV) + #tickets(N | N0 ou N4 ou CV) )
+- Apresentar ambos os SLA's no mesmo gráfico para cada customerCode separadamente
+- Teremos N gráficos
+- Aplicar algoritmos de predição kNN, Bayes, etc.
+  . Isso implica na separação em test e train samples
+  . Decidir qual o melhor
