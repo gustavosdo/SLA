@@ -1,8 +1,5 @@
 # Objetivo:
-O objetivo deste desafio é permitir uma melhor avaliação das suas habilidades como candidato a vaga de Data Scientist. Este desafio deve ser feito individualmente.
-
-# Instruções:
-Primeiro, faça um fork deste projeto para sua conta no Github (crie uma se você não possuir). Em seguida, implemente o projeto tal qual descrito abaixo, em seu próprio fork. Por fim, faça Push de todas as suas alterações para o seu fork no Github e envie um pull request para este repositório original.
+O objetivo deste desafio é permitir a melhor avaliação das suas habilidades como candidato a vaga de Data Scientist. Este desafio deve ser feito individualmente.
 
 # Enunciado do Teste
 
@@ -19,7 +16,7 @@ Os dados fornecidos são de 01 de Janeiro de 2019 até 26 de Fevereiro de 2019. 
   * Para identificar qual  ticket ja foi fechado , usa-se a coluna “callStatus”, onde os status fechados são: N0, N4 e CV.
   * Para identificar quais tickets foram fechados dentro ou fora do SLA , usa-se a coluna “onTimeSolution”(S = foi fechado dentro e N = não foi fechado dentro)
 
-  ## Serão avaliados:
+  ## São avaliados:
   * Algoritmo utilizado
   * Acuracidade do modelo: métricas utilizadas
   * Organização do código( será avaliado no GIT)

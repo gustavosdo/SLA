@@ -1,4 +1,6 @@
 Primeira parte: Leitura
+- Ler os dados e verificar formato da data
+- Corrigir o formato da data para ser possível plotar
 - Selecionar os pedidos fechados, i.e, callStatus = N0, N4 e CV --> pre-selected dataset
 - Obter uma lista com todos os cutomerCode presentes no pre-selected dataset (N clientes)
 - Para cada customerCode calcular o SLA(t, Janeiro) e o SLA(t, Fevereiro)
