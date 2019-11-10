@@ -1,7 +1,9 @@
-dataInspect = function(){
+library(doParallel)
+library(foreach)
+
+dataInspect = function(fileName = NULL){
 
   # define dataset
-  fileName = '/home/luga/Dropbox/Git/DataScientistTest/dataset/ticket_cientista.csv'
   dataset = defData(dataset_filename = fileName)
 
   # Variables names
@@ -37,17 +39,34 @@ dataInspect = function(){
   charDateTime = gsub ( x = gsub(x = as.character(notNullSolved$closeDateTime), pattern = 'ISODate', replacement = '') , replacement = '', pattern = "\"")
   charDateTime = gsub(x = charDateTime, pattern = "\\(", replacement = '')
   charDateTime = gsub(x = charDateTime, pattern = "\\)", replacement = '')
+  charDateTime = gsub(x = charDateTime, pattern = "T", replacement = ' ')
   notNullSolved$closeDateTime = charDateTime
 
   # Checking the daylight saving time entries
-  for (iter_n in 1:dim(notNullSolved)[1]){
-    iter_row = notNullSolved[iter_n,]
-    charTime = iter_row$closeDateTime
-    if (substr(x = charTime, start = 26, stop = 26) == '2'){
-      print(charTime)
-    }
-  }
+  # for (iter_n in 1:dim(notNullSolved)[1]){
+  #   iter_row = notNullSolved[iter_n,]
+  #   charTime = iter_row$closeDateTime
+  #   if (substr(x = charTime, start = 26, stop = 26) == '2'){
+  #     print(charTime)
+  #   }
+  # }
 
+  # Slicing the strings of closeDateTime
+  notNullSolved$closeDateTime = sapply(notNullSolved$closeDateTime, function(x){substr(x = x, start = 1, stop = 19)})
+
+  # # Converting dates to "numeric" format
+  # threads = parallel::detectCores() - 1
+  # cl = makeCluster(threads)
+  # registerDoParallel(cl)
   #
-  #hist(dataset$closeDateTime, "year", freq = T)
+  # charDateTime = foreach::foreach (iter_n = 1:dim(notNullSolved)[1]) %dopar% {
+  #   return(strptime(x = notNullSolved$closeDateTime[iter_n], format = "%Y-%m-%dT%H:%M:%S"))
+  # }
+  # notNullSolved$closeDateTime = charDateTime
+  # stopCluster(cl)
+
+  # Histogram of closeDateTime
+  #hist(as.POSIXct(preProcessedData$closeDateTime), "weeks", format = "%d %b")
+
+  return(notNullSolved)
 }
