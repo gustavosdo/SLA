@@ -37,7 +37,12 @@ harmonizeDateTime = function(dataset){
   # Slicing the strings of closeDateTime
   charDateTime = sapply(charDateTime, function(x){substr(x = x, start = 1, stop = 19)})
 
+  # returns the harmonized date/time set to original dataset
   dataset$closeDateTime = charDateTime
+
+  # removes the entry solved from 2017
+  dataset = dataset[order(dataset$closeDateTime),]
+  dataset = dataset[-c(1),]
 
   return(dataset)
 }
