@@ -1,14 +1,28 @@
 {
-	  "input_filename": "",
-		"rawdata_path": "/dados/rawdata/",
-		"lu_relative_path": "land-use/",
-		"past_lu_relative_path": "land-use/past/",
-		"ecoregions_relative_path": "land-use/ecoregions/",
-		"variables_relative_path": "variables/",
-		"species_relative_path": "species/placeholder_for_dev/",
-		"processed_relative_path": "processed/",
-		"output_relative_path": "results/",
-		"solver_results_relative_path": "results/solver_runs/",
-		"post_processed_relative_path": "results/post_processed/",
-		"extra_scripts_relative_path": "scripts/"
+  "input": {
+    "filename": "/home/luga/Dropbox/Git/SLA/dataset/ticket_cientista.csv",
+    "exist_header": true,
+    "separator": ";",
+    "initial_date": "2019-jan-01",
+    "end_date": "2019-feb-26",
+    "format_date": true,
+    "closed_ticket_col": "callStatus",
+    "closed_ontime_col": "onTimeSolution",
+    "closeDate_col": "closeDateTime"
+  },
+  "process":{
+    "customers": ["",""],
+	  "days_prediction": "2",
+	  "next_days": true,
+	  "last_days": false,
+    "models": ["", ""],
+    "combine_models": false,
+    "scenarios": ["",""]
+  },
+  "post_process":{
+    "only_post_process": false,
+    "plot_histo_dates": true,
+    "plot_sla": true,
+    "plot_models": true
+  }
 }
