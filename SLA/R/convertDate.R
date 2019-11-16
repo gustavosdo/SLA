@@ -27,7 +27,7 @@ convertDate = function(dataset, cfg){
 
   # Slicing the strings of closeDateTime
   charDateTime = sapply(charDateTime, function(x){substr(x = x, start = 1, stop = 19)})
-  names(charDateTime) = dataset[cfg$pre_process$callNumber_col]
+  names(charDateTime) = as.character(unlist(dataset[cfg$pre_process$callNumber_col]))
 
   # Ensure only entries from the correct time range are considered
   iniDate = cfg$pre_process$initial_date
@@ -36,10 +36,18 @@ convertDate = function(dataset, cfg){
   # Parallelism setup
   threads = cfg$pre_process$threads
   cl <- parallel::makeCluster(threads, type = 'SOCK', outfile = "")
-  registerDoParallel(cl)
+  doParallel::registerDoParallel(cl)
   on.exit(stopCluster(cl))
 
-
+  # Entries in the correct time range
+  corTimeRange = foreach (iter_name = names(charDateTime)[1:length(charDateTime)]) %dopar% {
+    corTimeRange = as.list(NA)
+    iter_name = as.character(iter_name)
+    names(corTimeRange) = iter_name
+    ###### INSERT if HERE!
+    corTimeRange[[iter_name]] = charDateTime[[iter_name]]
+    return(corTimeRange)
+  }
 
   #dataset[order(dataset[colTime])]
   #dataset = dataset[-c(1),]
