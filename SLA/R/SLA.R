@@ -23,17 +23,24 @@ SLA = function(config_json_filename = NULL){
   # Reading the json config
   cfg = fromJSON(config_json_filename)
 
+  # Setup folder
+  dirs = setup_folder(cfg = cfg)
+
   # Preprocessing and processing modules
-  if (!cfg$post_process$only_post_process){
-
+  if (cfg$input$run_preprocess){
     # Read data
-    dataset = read.csv(file = cfg$input$filename,
-                       header = cfg$input$exist_header,
-                       sep = cfg$input$separator)
-
+    dataset = read.csv(file = paste0(cfg$folders$input_folder, cfg$pre_process$filename),
+                       header = cfg$pre_process$exist_header,
+                       sep = cfg$pre_process$separator)
     # Formatting data correctly if needed
-    if (cfg$input$format_date){
-      dataset = formatDate(dataset, cfg)
+    if (cfg$pre_process$format_date){
+      dataset = convertDate(dataset = dataset, cfg = cfg)
     }
+    # Saving the resultant preprocessed dataset
+      write.csv(x = dataset, file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
+  } else {
+    dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
+                       header = cfg$pre_process$exist_header,
+                       sep = cfg$pre_process$separator)
   }
 }

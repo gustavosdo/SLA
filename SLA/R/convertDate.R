@@ -1,5 +1,5 @@
 
-formatDate = function(dataset, cfg){
+convertDate = function(dataset, cfg){
 
   # Only not null close date time entries
   dataset = dataset[dataset$closeDateTime != 'null',]

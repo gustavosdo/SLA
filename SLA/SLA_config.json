@@ -1,6 +1,13 @@
 {
-  "input": {
-    "filename": "/home/luga/Dropbox/Git/SLA/dataset/ticket_cientista.csv",
+  "folders": {
+    "input_folder": "/home/luga/Dropbox/Git/SLA/dataset/",
+    "preprocessed": "/home/luga/Dropbox/Git/SLA/preprocessed/",
+    "processed": "/home/luga/Dropbox/Git/SLA/processed/",
+    "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/"
+  },
+  "pre_process": {
+    "run_preprocess": true,
+    "filename": "ticket_cientista.csv",
     "exist_header": true,
     "separator": ";",
     "initial_date": "2019-jan-01",
@@ -8,19 +15,23 @@
     "format_date": true,
     "closed_ticket_col": "callStatus",
     "closed_ontime_col": "onTimeSolution",
-    "closeDate_col": "closeDateTime"
+    "closeDate_col": "closeDateTime",
+    "is_isodate": true
   },
   "process":{
+    "run_process": true,
     "customers": ["",""],
 	  "days_prediction": "2",
 	  "next_days": true,
 	  "last_days": false,
     "models": ["", ""],
-    "combine_models": false,
-    "scenarios": ["",""]
+    "scenarios":{
+      "combine_models": false,
+      "models_combinations": ["",""]
+    }
   },
   "post_process":{
-    "only_post_process": false,
+    "run_postprocess": true,
     "plot_histo_dates": true,
     "plot_sla": true,
     "plot_models": true
