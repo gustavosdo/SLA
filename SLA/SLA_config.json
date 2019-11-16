@@ -16,6 +16,8 @@
     "closed_ticket_col": "callStatus",
     "closed_ontime_col": "onTimeSolution",
     "closeDate_col": "closeDateTime",
+    "slaStatus_col": "slaStatus",
+    "customers_col": "customerCodes",
     "is_isodate": true
   },
   "process":{
@@ -31,6 +33,7 @@
     }
   },
   "post_process":{
+    "only_postprocess": false,
     "run_postprocess": true,
     "plot_histo_dates": true,
     "plot_sla": true,
