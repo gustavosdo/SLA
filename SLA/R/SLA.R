@@ -38,7 +38,8 @@ SLA = function(config_json_filename = NULL){
                         cfg$pre_process$closed_ontime_col,
                         cfg$pre_process$closeDate_col,
                         cfg$pre_process$slaStatus_col,
-                        cfg$pre_process$customers_col)
+                        cfg$pre_process$customers_col,
+                        cfg$pre_process$callNumber_col)
       dataset = dataset[, names(dataset) %in% c(relevant_cols)]
       # Formatting data correctly if needed
       if (cfg$pre_process$format_date){

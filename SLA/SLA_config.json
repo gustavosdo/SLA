@@ -10,15 +10,16 @@
     "filename": "ticket_cientista.csv",
     "exist_header": true,
     "separator": ";",
-    "initial_date": "2019-jan-01",
-    "end_date": "2019-feb-26",
+    "initial_date": "2019-01-01 00:00:00",
+    "end_date": "2019-02-26 23:59:59",
     "format_date": true,
     "closed_ticket_col": "callStatus",
     "closed_ontime_col": "onTimeSolution",
     "closeDate_col": "closeDateTime",
     "slaStatus_col": "slaStatus",
     "customers_col": "customerCodes",
-    "is_isodate": true
+    "callNumber_col": "callNumber",
+    "threads": 7
   },
   "process":{
     "run_process": true,
