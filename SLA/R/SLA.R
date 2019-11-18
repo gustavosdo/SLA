@@ -28,29 +28,35 @@ SLA = function(config_json_filename = NULL){
 
   # Check the need to run preprocessing and processing
   if (!cfg$post_process$only_postprocess){
+
     # Preprocessing module
     if (cfg$pre_process$run_preprocess){
+
       # Read data
-      dataset = read.csv(file = paste0(cfg$folders$input_folder, cfg$pre_process$filename),
-                         header = cfg$pre_process$exist_header,
-                         sep = cfg$pre_process$separator)
-      relevant_cols = c(cfg$pre_process$closed_ticket_col,
-                        cfg$pre_process$closed_ontime_col,
-                        cfg$pre_process$closeDate_col,
-                        cfg$pre_process$slaStatus_col,
-                        cfg$pre_process$customers_col,
-                        cfg$pre_process$callNumber_col)
-      dataset = dataset[, names(dataset) %in% c(relevant_cols)]
+      dataset = readData(cfg)
+
       # Formatting data correctly if needed
       if (cfg$pre_process$format_date){
         dataset = convertDate(dataset = dataset, cfg = cfg)
       }
+
+      # Determine the Service Level Agreement as function of time
+      #dataset = calc_SLA(dataset = dataset, cfg = cfg)
+
       # Saving the resultant preprocessed dataset
       write.csv(x = dataset, file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
+
     } else {
+
       dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
                          header = cfg$pre_process$exist_header,
                          sep = cfg$pre_process$separator)
+
+      } # else of if preprocessing flag
+
+    # Processing module
+    if (cfg$process$run_process){
+      print('ok') # WIP
     }
-  }
+  } # if not only_postprocess
 }

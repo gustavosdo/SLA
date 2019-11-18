@@ -44,15 +44,14 @@ convertDate = function(dataset, cfg){
     corTimeRange = as.list(NA)
     iter_name = as.character(iter_name)
     names(corTimeRange) = iter_name
-    ###### INSERT if HERE!
-    corTimeRange[[iter_name]] = charDateTime[[iter_name]]
+    if (charDateTime[[iter_name]] >= iniDate & charDateTime[[iter_name]] <= endDate){
+      corTimeRange[[iter_name]] = charDateTime[[iter_name]]
+    }
     return(corTimeRange)
   }
 
-  #dataset[order(dataset[colTime])]
-  #dataset = dataset[-c(1),]
-
   # returns the harmonized date/time set to original dataset
-  dataset[colTime] = charDateTime
+  dataset[colTime] = unlist(corTimeRange)
+  dataset[!is.na(dataset[colTime]),]
   return(dataset)
 }
