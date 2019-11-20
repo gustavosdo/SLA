@@ -6,6 +6,9 @@ calc_SLA = function(dataset, cfg){
   closedDateTime = dataset[colTime]
 
   # n = Month sum of number of tickets closed on time (onTimeSolution = S; callStatus = N0, N4 or CV) per day
+  # Check how many months and how many days for each month are there
+  #n_jan = rep(0, 31)
+  #n_feb = rep(0, 31)
 
   # N = Month sum of number of tickets closed per day (callStatus = N0, N4 or CV)
 
