@@ -40,17 +40,21 @@ SLA = function(config_json_filename = NULL){
         dataset = convertDate(dataset = dataset, cfg = cfg)
       }
 
+      # Selection of customers must be implemented before the calcSLA
+      # Maybe the best way to do it is using the wrapper-engine philosophy
+      # like the post-processing of PLANGEA
+
       # Determine the Service Level Agreement as function of time
       #dataset = calc_SLA(dataset = dataset, cfg = cfg)
 
       # Saving the resultant preprocessed dataset
-      write.csv(x = dataset, file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
+      write.csv(x = dataset,
+                file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
 
     } else {
 
       dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
-                         header = cfg$pre_process$exist_header,
-                         sep = cfg$pre_process$separator)
+                         header = cfg$pre_process$exist_header)
 
       } # else of if preprocessing flag
 
