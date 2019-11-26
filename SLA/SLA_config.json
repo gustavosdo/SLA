@@ -17,7 +17,7 @@
     "closed_ontime_col": "onTimeSolution",
     "closeDate_col": "closeDateTime",
     "slaStatus_col": "slaStatus",
-    "customers_col": "customerCodes",
+    "customers_col": "customerCode",
     "callNumber_col": "callNumber",
     "threads": 7
   },
