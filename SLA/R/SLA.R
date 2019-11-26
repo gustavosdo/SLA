@@ -40,12 +40,8 @@ SLA = function(config_json_filename = NULL){
         dataset = convertDate(dataset = dataset, cfg = cfg)
       }
 
-      # Selection of customers must be implemented before the calcSLA
-      # Maybe the best way to do it is using the wrapper-engine philosophy
-      # like the post-processing of PLANGEA
-
       # Determine the Service Level Agreement as function of time
-      #dataset = calc_SLA(dataset = dataset, cfg = cfg)
+      #dataset = calcSLA(dataset = dataset, cfg = cfg)
 
       # Saving the resultant preprocessed dataset
       write.csv(x = dataset,

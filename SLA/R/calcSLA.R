@@ -1,14 +1,41 @@
+#' @title Wrapper of SLA variable determination
+#' @name calcSLA
+#'
+#' @description Service Level Agreement is the fraction of tickets closed in time
+#' w.r.t the total of tickets in the month until the considered time
+#'
+#' @param cfg A json with configuration data
+#' @param dataset The dataset with the needed modifications done by convertDate
+#'
+#' @return listSLA A list of lists. Each list contains the SLA for a different customer
+#'
+#' @import parallel foreach doParallel
 
 calcSLA = function(dataset, cfg){
 
-  # Remember to select customer before all this processing!!!!
+  # Parallelism setup
+  threads = cfg$pre_process$threads
+  cl <- parallel::makeCluster(threads, type = 'SOCK', outfile = "")
+  doParallel::registerDoParallel(cl)
+  on.exit(stopCluster(cl))
+
+  # Customer codes
+  customerCodes = as.character(unique(dataset[,cfg$pre_process$customers_col]))
+
+  # Calculate SLA for each user using threads
+  customerSLAs = foreach (iter_name = customerCodes[1:length(customerCodes)], .export = 'calcCustomerSLA') %dopar% {
+    customerSLA = as.list(NA)
+    names(customerSLA) = iter_name
+    datasetCustomer = dataset[dataset[cfg$pre_process$customers_col] == as.numeric(iter_name),]
+    customerSLA[[iter_name]] = calcCustomerSLA(datasetCustomer, cfg)
+    return(customerSLA)
+  }
 
   # Getting the vector of date/time of closure
-  colTime = cfg$pre_process$closeDate_col
-  closedDateTime = dataset[colTime]
+  #colTime = cfg$pre_process$closeDate_col
+  #closedDateTime = dataset[colTime]
 
-  # ALL CODE BELOW MUST BE REFACTORED
-  # IT IS ASSUMING THAT ALL MONTHS FOR ALL YEARS ARE RELEVANT (WHICH CAN BE FALSE)
+  # Getting
 
   # # Checking years of interest
   # n_years = length(seq(from = as.Date(cfg$pre_process$initial_date), to = as.Date(cfg$pre_process$end_date), by = 'year'))
