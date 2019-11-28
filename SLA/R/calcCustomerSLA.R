@@ -4,10 +4,35 @@ calcCustomerSLA = function(dataset, cfg){
   # Adjusting types
   dataset[,cfg$pre_process$closeDate_col] = as.character(dataset[,cfg$pre_process$closeDate_col])
 
-  # Vector of SLA for each day
-  days = seq(from = as.Date(cfg$pre_process$initial_date), to = as.Date(cfg$pre_process$end_date), by = 'day')
-  res = as.list(rep(NA, length(days)))
-  names(res) = days
+  # Vector of SLA for each year, month and day
+  days = createSLAvector(cfg)
+
+  # if (substr(cfg$pre_process$initial_date, 1, 4) < substr(cfg$pre_process$end_date, 1, 4)){
+  #   years = as.numeric(substr(cfg$pre_process$end_date, 1, 4)) - as.numeric(substr(cfg$pre_process$initial_date, 1, 4)) + 1
+  # } else {
+  #   years = 1
+  # }
+  # years_names = as.character(
+  #   sapply(1:years,
+  #          function(x){
+  #            as.numeric(substr(cfg$pre_process$initial_date, 1, 4)) + x - 1
+  #          }
+  #   )
+  # )
+  #
+  # # number of months between initial and end dates
+  # months = elapsedMonths(cfg$pre_process$initial_date, cfg$pre_process$end_date)
+  # # names of each month
+  # month_names = month.name[as.numeric(substr(cfg$pre_process$initial_date, 6, 7)):(months+1)]
+  #
+  # # vector of days by each month
+  # days = as.list(rep(NA, length(months)+1))
+  # names(days) = month_names
+  # days = sapply(days, function(x){seqDays(x)})
+  #
+  # days = seq(from = as.Date(cfg$pre_process$initial_date), to = as.Date(cfg$pre_process$end_date), by = 'day')
+  # res = as.list(rep(NA, length(days)))
+  # names(res) = days
 
   for (iter_day in names(res)[1:length(days)]){
     # All tickets until the day

@@ -37,7 +37,7 @@ SLA = function(config_json_filename = NULL){
 
       # Formatting data correctly if needed
       if (cfg$pre_process$format_date){
-        dataset = convertDate(dataset = dataset, cfg = cfg)
+        dataset = convertDateFromIBM(dataset = dataset, cfg = cfg)
       }
 
       # Determine the Service Level Agreement as function of time
@@ -52,7 +52,7 @@ SLA = function(config_json_filename = NULL){
       dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
                          header = cfg$pre_process$exist_header)
 
-      } # else of if preprocessing flag
+    } # else of if preprocessing flag
 
     # Processing module
     if (cfg$process$run_process){

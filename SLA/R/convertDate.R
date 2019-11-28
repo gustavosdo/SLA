@@ -1,5 +1,5 @@
 #' @title Converts ISODate to a "numerical" format
-#' @name convertDate
+#' @name convertDateFromIBM
 #'
 #' @description The date/time of closure of tickets is in a odd format. This format disable any type of
 #' statistical treatment.
@@ -11,7 +11,7 @@
 #'
 #' @import parallel foreach doParallel
 
-convertDate = function(dataset, cfg){
+convertDateFromIBM = function(dataset, cfg){
 
   # Only not null close date time entries
   colTime = cfg$pre_process$closeDate_col

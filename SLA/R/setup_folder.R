@@ -7,9 +7,7 @@
 
 setup_folder = function(cfg){
 
-  cat("Creating directory \n")
-
-  # set the directory names from which to load all the data for the optimisation
+  # set the directory names from which to load all the data for the computation
   in_dir = cfg$folders$input_folder
   preprocessed = cfg$folders$preprocessed
   processed = cfg$folders$processed
