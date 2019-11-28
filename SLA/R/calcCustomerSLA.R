@@ -6,23 +6,24 @@ calcCustomerSLA = function(dataset, cfg){
 
   # Vector of SLA for each day
   days = seq(from = as.Date(cfg$pre_process$initial_date), to = as.Date(cfg$pre_process$end_date), by = 'day')
-  res = as.list(rep(0, length(days)))
+  res = as.list(rep(NA, length(days)))
   names(res) = days
 
   for (iter_day in names(res)[1:length(days)]){
-    closed_classes = c('N0', 'N4', 'CV')
-    closed_ptr = which(dataset[,cfg$pre_process$closed_ticket_col] %in% closed_classes)
-    time_ptr = dataset[,cfg$pre_process$closed_ontime_col] == 'S'
+    # All tickets until the day
     iter_ptr = dataset[,cfg$pre_process$closeDate_col] <= paste(iter_day, '23:59:59')
-    # Subset dataset
-    #
-    # Calculate n (total of closed tickets (in time) until iter_day)
-    #n = length()
+    iter_dataset = dataset[iter_ptr,]
     # Calculate N (total of tickets until iter_day)
-    #N = length()
+    N = dim(iter_dataset)[1]
+    # Pointers
+    closed_ptr = iter_dataset[,cfg$pre_process$closed_ticket_col] %in% c('N0', 'N4', 'CV') # closed tickets
+    iter_dataset = iter_dataset[closed_ptr,]
+    time_ptr = iter_dataset[,cfg$pre_process$closed_ontime_col] %in% c('S') # closed on time (on SLA)
+    iter_dataset = iter_dataset[time_ptr,]
+    # Calculate n (total of closed tickets (in time) until iter_day)
+    n = dim(iter_dataset)[1]
     # calculate the SLA
-    #res[iter_day] = n/N
+    res[iter_day] = ifelse(N == 0, 0, n/N)
   }
-
   return(res)
 }
