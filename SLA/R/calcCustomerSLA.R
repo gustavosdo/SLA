@@ -5,8 +5,8 @@ calcCustomerSLA = function(dataset, cfg){
   dataset[,cfg$pre_process$closeDate_col] = as.character(dataset[,cfg$pre_process$closeDate_col])
 
   # Date range from cfg
-  ini_date = cfg$pre_process$initial_date
-  end_date = cfg$pre_process$end_date
+  ini_date = substr(cfg$pre_process$initial_date, 1, 10)
+  end_date = substr(cfg$pre_process$end_date, 1, 10)
 
   # Vector of SLA for each year, month and day
   days = createSLAdf(cfg)

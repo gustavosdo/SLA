@@ -55,7 +55,7 @@ SLA = function(config_json_filename = NULL){
       dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
                          header = cfg$pre_process$exist_header)
 
-      load(file = paste0(cfg$folders$preprocessed))
+      load(file = paste0(cfg$folders$preprocessed, 'SLA_per_user'))
 
     } # else of if preprocessing flag
 
