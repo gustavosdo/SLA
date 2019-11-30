@@ -43,7 +43,7 @@ calcCustomerSLA = function(dataset, cfg)
         SLAs[iter_day, iter_col] = ifelse(N == 0, NA, n/N)
         closeds[iter_day, iter_col] = n
         allTickets[iter_day, iter_col] = N
-        if ( (substr(date, 6, 10) %in% inex_days) | ( (!isBissextile(substr(iter_name, 1, 4))) & (substr(date, 9, 10) == '29') ) )
+        if ( (substr(date, 6, 10) %in% inex_days) | ( (!isBissextile(substr(iter_name, 1, 4))) & (substr(date, 6, 10) == '02-29') ) )
         {
           SLAs[iter_day, iter_col] = NA
           closeds[iter_day, iter_col] = NA
