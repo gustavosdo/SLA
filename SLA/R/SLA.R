@@ -41,21 +41,21 @@ SLA = function(config_json_filename = NULL){
       }
 
       # Determine the Service Level Agreement as function of time
-      SLA_per_user = calcSLA(dataset = dataset, cfg = cfg)
+      customersData = calcSLA(dataset = dataset, cfg = cfg)
 
       # Saving the resultant preprocessed dataset
       write.csv(x = dataset,
                 file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
 
       # Saving the SLA per user object
-      save(SLA_per_user, file = paste0(cfg$folders$preprocessed, 'SLA_per_user'))
+      save(customersData, file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
 
     } else {
 
       dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
                          header = cfg$pre_process$exist_header)
 
-      load(file = paste0(cfg$folders$preprocessed, 'SLA_per_user'))
+      load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
 
     } # else of if preprocessing flag
 

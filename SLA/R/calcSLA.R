@@ -23,13 +23,13 @@ calcSLA = function(dataset, cfg){
   customerCodes = as.character(unique(dataset[,cfg$pre_process$customers_col]))
 
   # Calculate SLA for each user using threads
-  customerSLAs = foreach (iter_name = customerCodes[1:length(customerCodes)], .packages = c('devtools')) %dopar% {
+  customersData = foreach (iter_name = customerCodes[1:length(customerCodes)], .packages = c('devtools')) %dopar% {
     load_all()
-    customerSLA = as.list(NA)
-    names(customerSLA) = iter_name
+    customerData = as.list(NA)
+    names(customerData) = iter_name
     datasetCustomer = dataset[dataset[cfg$pre_process$customers_col] == as.numeric(iter_name),]
-    customerSLA[[iter_name]] = calcCustomerSLA(datasetCustomer, cfg)
-    return(customerSLA)
+    customerData[[iter_name]] = calcCustomerSLA(datasetCustomer, cfg)
+    return(customerData)
   }
-  return(customerSLAs)
+  return(customersData)
 }
