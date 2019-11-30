@@ -7,6 +7,7 @@ an = function(x){as.numeric(x)}
 
 # Defining function to determine if the year is bissextile
 isBissextile = function(x){
+  if (!is.numeric(x)){ x = as.numeric(x) }
   char_x = ac(x)
   if ( xor ( (substr(char_x, 3, 4) == '00') & ((x %% 400) == 0) , (substr(char_x, 3, 4) != '00') & ((x %% 4) == 0)) )
   {
