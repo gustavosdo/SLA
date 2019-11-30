@@ -8,7 +8,7 @@
 #'
 #' @return No value is returned. The parameters define the need of output plots, tables, etc.
 #'
-#' @import jsonlite
+#' @import jsonlite devtools
 
 SLA = function(config_json_filename = NULL){
 
@@ -50,12 +50,17 @@ SLA = function(config_json_filename = NULL){
       # Saving the SLA per user object
       save(customersData, file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
 
+      # Saving the cfg used
+      save(cfg, file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
+
     } else {
 
       dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
                          header = cfg$pre_process$exist_header)
 
       load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
+
+      load(file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
 
     } # else of if preprocessing flag
 

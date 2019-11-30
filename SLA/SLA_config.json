@@ -6,10 +6,11 @@
     "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/"
   },
   "pre_process": {
-    "run_preprocess": false,
+    "run_preprocess": true,
     "filename": "ticket_cientista.csv",
     "exist_header": true,
     "separator": ";",
+    "range_within_year": true,
     "initial_date": "2019-01-01 00:00:00",
     "end_date": "2019-02-26 23:59:59",
     "format_date": true,
