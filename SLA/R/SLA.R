@@ -26,47 +26,43 @@ SLA = function(config_json_filename = NULL){
   # Setup folder
   dirs = setupFolder(cfg = cfg)
 
-  # Check the need to run preprocessing and processing
-  if (!cfg$post_process$only_postprocess){
+  # Preprocessing module
+  if (cfg$pre_process$run_preprocess){
 
-    # Preprocessing module
-    if (cfg$pre_process$run_preprocess){
+    # Read data
+    dataset = readData(cfg)
 
-      # Read data
-      dataset = readData(cfg)
-
-      # Formatting data correctly if needed
-      if (cfg$pre_process$format_date){
-        dataset = convertDateFromIBM(dataset = dataset, cfg = cfg)
-      }
-
-      # Determine the Service Level Agreement as function of time
-      customersData = calcSLA(dataset = dataset, cfg = cfg)
-
-      # Saving the resultant preprocessed dataset
-      write.csv(x = dataset,
-                file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
-
-      # Saving the SLA per user object
-      save(customersData, file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
-
-      # Saving the cfg used
-      save(cfg, file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
-
-    } else {
-
-      dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
-                         header = cfg$pre_process$exist_header)
-
-      load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
-
-      load(file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
-
-    } # else of if preprocessing flag
-
-    # Processing module
-    if (cfg$process$run_process){
-      print('ok') # WIP
+    # Formatting data correctly if needed
+    if (cfg$pre_process$format_date){
+      dataset = convertDateFromIBM(dataset = dataset, cfg = cfg)
     }
-  } # if not only_postprocess
+
+    # Determine the Service Level Agreement as function of time
+    customersData = calcSLA(dataset = dataset, cfg = cfg)
+
+    # Saving the resultant preprocessed dataset
+    write.csv(x = dataset,
+              file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
+
+    # Saving the SLA per user object
+    save(customersData, file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
+
+    # Saving the cfg used
+    save(cfg, file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
+
+  } else {
+
+    dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
+                       header = cfg$pre_process$exist_header)
+
+    load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
+
+    load(file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
+
+  } # else of if preprocessing flag
+
+  # Processing module
+  if (cfg$process$run_process){
+    print('ok') # WIP
+  }
 }
