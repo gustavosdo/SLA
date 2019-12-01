@@ -1,3 +1,13 @@
+#' @title Service Level Agreement determination
+#' @name calcCustomerSLA
+#'
+#' @description This module calculates the SLA for a specific customer
+#' in a specific dataset
+#'
+#' @param cfg A json with configuration data
+#' @param dataset The dataset with the needed modifications done by convertDate
+#'
+#' @return A list with SLA, total calls and closed calls for each day of the date range specified by cfg
 
 calcCustomerSLA = function(dataset, cfg)
 {

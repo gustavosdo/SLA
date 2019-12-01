@@ -6,7 +6,7 @@
     "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/"
   },
   "pre_process": {
-    "run_preprocess": true,
+    "run_preprocess": false,
     "filename": "ticket_cientista.csv",
     "exist_header": true,
     "separator": ";",

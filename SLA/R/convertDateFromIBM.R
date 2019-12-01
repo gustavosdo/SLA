@@ -41,8 +41,6 @@ convertDateFromIBM = function(dataset, cfg){
 
   # Entries in the correct time range
   corTimeRange = foreach (iter_name = names(charDateTime)[1:length(charDateTime)]) %dopar% {
-    #.packages = c('devtools')
-    #load_all()
     corTimeRange = as.list(NA)
     iter_name = as.character(iter_name)
     names(corTimeRange) = iter_name

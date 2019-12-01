@@ -5,7 +5,7 @@
 #' @param config_json_filename A json with configuration data
 #'
 
-setup_folder = function(cfg){
+setupFolder = function(cfg){
 
   # set the directory names from which to load all the data for the computation
   in_dir = cfg$folders$input_folder

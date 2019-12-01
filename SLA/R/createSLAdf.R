@@ -1,3 +1,15 @@
+#' @title Creates dataframe simiar to a calendar
+#' @name createSLAdf
+#'
+#' @description This function generates a data frame with the date range
+#' given by json config file or dataset
+#'
+#' @param cfg The json file containing all parameters.
+#' @param dataset The dataset with the correct date object
+#'
+#' @return A dataframe where the rows are the days and each column is a month.
+#'
+#' @import jsonlite devtools
 
 createSLAdf = function(cfg, dataset){
 
