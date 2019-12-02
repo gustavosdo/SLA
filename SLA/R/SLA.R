@@ -52,17 +52,22 @@ SLA = function(config_json_filename = NULL){
 
   } else {
 
+    # Load all preprocessed data
     dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
                        header = cfg$pre_process$exist_header)
 
     load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
-
-    load(file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
 
   } # else of if preprocessing flag
 
   # Processing module
   if (cfg$process$run_process){
     print('ok') # WIP
+  }
+
+  # Post processing module
+  if (cfg$post_process$run_postprocess){
+    plotSLAs(cfg, customersData)
+    #plotCalls(cfg, dataset)
   }
 }

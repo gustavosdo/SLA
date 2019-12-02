@@ -1,5 +1,5 @@
 #' @title Set the directory names.
-#' @name setup_folder
+#' @name setupFolder
 #'
 #' @description Set the directory names from which to load all the data for the processing
 #' @param config_json_filename A json with configuration data
