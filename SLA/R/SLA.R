@@ -67,7 +67,9 @@ SLA = function(config_json_filename = NULL){
 
   # Post processing module
   if (cfg$post_process$run_postprocess){
-    plotSLAs(cfg, customersData)
+    if (cfg$post_process$plot_sla){
+      plotSLAs(cfg, customersData)
+    }
     #plotCalls(cfg, dataset)
   }
 }
