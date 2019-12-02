@@ -7,4 +7,3 @@ config_json_filename = 'SLA_config.json'
 
 SLA(config_json_filename)
 cfg = fromJSON(config_json_filename)
-
