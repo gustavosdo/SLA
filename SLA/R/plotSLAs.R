@@ -38,7 +38,9 @@ plotSLAs = function(cfg, customersData)
 
     # Make the plot
     png(filename = paste0(cfg$folders$postprocessed, 'SLA_', customer, '.png'))
-    plot(x = Date, y = SLA, type = 'b', main = paste0('Customer ', customer), xlab = 'Date (YYYY-MM-DD)', ylab = 'Service Level Agreement')
+    plot(x = Date, y = SLA,
+         type = cfg$post_process$plot_sla$plot_type,
+         main = paste0('Customer ', customer), xlab = cfg$post_process$plot_sla$axes_names[2], ylab = cfg$post_process$plot_sla$axes_names[1])
     dev.off()
 
   } # for each (customer)
