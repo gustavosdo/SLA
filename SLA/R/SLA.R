@@ -78,6 +78,8 @@ SLA = function(config_json_filename = NULL){
     if (cfg$post_process$plot_sla$run_module){
       plotSLAs(cfg, customersData)
     }
-    #plotCalls(cfg, dataset)
+    if (cfg$post_process$plot_histo_dates$run_module){
+      plotCalls(cfg, customersData)
+    }
   }
 }

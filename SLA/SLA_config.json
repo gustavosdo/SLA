@@ -23,7 +23,7 @@
     "threads": 7
   },
   "process":{
-    "run_process": true,
+    "run_process": false,
     "customers": ["",""],
 	  "days_prediction": "2",
 	  "next_days": true,
@@ -42,8 +42,14 @@
     }
   },
   "post_process":{
-    "run_postprocess": false,
-    "plot_histo_dates": true,
+    "run_postprocess": true,
+    "plot_histo_dates": {
+      "run_module": true,
+      "axes_names": ["Number of calls", "Date"],
+      "color_range": ["FF0000", "0000FF"],
+      "plot_size": [1080, 1920],
+      "plot_format": "png"
+    },
     "plot_sla": {
       "run_module": true,
       "axes_names": ["SLA per day", "Date"],

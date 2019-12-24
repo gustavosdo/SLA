@@ -4,7 +4,10 @@
 #' @description This module creates a neural network with a few parameters.
 #' @param config_json_filename A json with configuration data
 #'
+#' @import Deriv
+#'
 
+# Heavily inspired by https://www.r-bloggers.com/how-to-build-your-own-neural-network-from-scratch-in-r/
 setupNN = function(cfg, train_train_dataset){
 
   # Neural network parameters
@@ -12,6 +15,11 @@ setupNN = function(cfg, train_train_dataset){
   activation = cfg$process$neural_network$activation_function
   loss = cfg$process$neural_network$loss_function
   neurons = cfg$process$neural_network$neurons_per_hidden_layer
+  if (is.null(activation)) {activation = function(x){1/(1+exp(-x))}}
+  if (is.null(loss)) {loss = function(nn){sum((nn$y - nn$out)^2)}}
+
+  # Derivative of activation function
+  d_activation = Deriv(activation, "x")
 
   # Target and preview parameters columns
   target_column = cfg$process$neural_network$target_column
