@@ -1,7 +1,7 @@
 #' @title SLA plots
 #' @name plotSLAs
 #'
-#' @description Creates the plots of SLAs in a parallel environment
+#' @description Creates the plots of SLAs
 #'
 #' @param cfg A json with configuration data
 #' @param customersData The dataset with the SLAs for all customers

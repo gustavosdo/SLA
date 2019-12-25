@@ -47,11 +47,12 @@
       "run_module": true,
       "axes_names": ["Number of calls", "Date"],
       "color_range": ["FF0000", "0000FF"],
+      "plot_type": "b",
       "plot_size": [1080, 1920],
       "plot_format": "png"
     },
     "plot_sla": {
-      "run_module": true,
+      "run_module": false,
       "axes_names": ["SLA per day", "Date"],
       "color_range": ["FF0000", "0000FF"],
       "plot_type": "b",

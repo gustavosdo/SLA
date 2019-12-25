@@ -80,6 +80,7 @@ SLA = function(config_json_filename = NULL){
     }
     if (cfg$post_process$plot_histo_dates$run_module){
       plotCalls(cfg, customersData)
+      plotClosedCalls(cfg, customersData)
     }
   }
 }

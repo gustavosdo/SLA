@@ -1,7 +1,7 @@
-#' @title Calls per day plots.
-#' @name plotCalls
+#' @title Closed calls per day plots.
+#' @name plotClosedCalls
 #'
-#' @description Creates the plots of calls
+#' @description Creates the plots of closed calls
 #'
 #' @param cfg A json with configuration data
 #' @param customersData The dataset with the calls for all customers
@@ -9,7 +9,7 @@
 #' @return Do not return any output. All plots are saved in the folder defined by cfg
 #'
 
-plotCalls = function(cfg, customersData)
+plotClosedCalls = function(cfg, customersData)
 {
 
   # Run over customers calls
@@ -17,7 +17,7 @@ plotCalls = function(cfg, customersData)
     Calls = list()
     Date = list()
     customer = names(iter_customer)
-    Calls_df = iter_customer[[1]]$allTickets
+    Calls_df = iter_customer[[1]]$closeds
     for (iter_col in 1:ncol(Calls_df)){
       iter_col_name = colnames(Calls_df)[iter_col]
       for (iter_row in 1:nrow(Calls_df)){
@@ -37,7 +37,7 @@ plotCalls = function(cfg, customersData)
     Date = as.Date(Date)
 
     # Make the plot
-    png(filename = paste0(cfg$folders$postprocessed, 'AllCalls_', customer, '.png'))
+    png(filename = paste0(cfg$folders$postprocessed, 'ClosedCalls_', customer, '.png'))
     plot(x = Date, y = Calls,
          type = cfg$post_process$plot_histo_dates$plot_type,
          main = paste0('Customer ', customer), xlab = cfg$post_process$plot_histo_dates$axes_names[2], ylab = cfg$post_process$plot_histo_dates$axes_names[1])
