@@ -68,7 +68,7 @@ SLA = function(config_json_filename = NULL){
     if ("neural_network" %in% cfg$process$models){
       # Change it in order to allow the preview for 2 days inside the dataset
       train_dataset = dataset
-      NN = setupNN(cfg = cfg, train_dataset = train_dataset)
+      solution_NN = neuralNetwork(cfg = cfg, train_dataset = train_dataset)
       print('Acessing neural network processing module.')
     }
   }
