@@ -28,11 +28,7 @@
 	  "days_prediction": "2",
 	  "next_days": true,
 	  "last_days": false,
-    "models": ["neural network", "random forest"],
-    "scenarios":{
-      "combine_models": false,
-      "models_combinations": ["",""]
-    }
+    "models": ["", ""]
   },
   "post_process":{
     "run_postprocess": false,

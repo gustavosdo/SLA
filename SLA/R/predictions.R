@@ -10,7 +10,7 @@
 #'
 #' @return solution A vector with the SLA preview
 #'
-#' @import parallel foreach doParallel
+#' @import parallel foreach doParallel fpp2
 
 predictions = function(cfg, customersData){
 
@@ -44,22 +44,40 @@ predictions = function(cfg, customersData){
         } # row iteration
       } # col iteration
 
-      # Get a vector of values in order to pass to a plot function
+      # Get a vector of values and fix format ----
       Calls = unlist(Calls)
       Date = unlist(Date)
-
-      # Fixing the format
       Date = as.Date(Date)
 
-      # Building the correct data frame to send to processing algorithms ----
-      # Building a vector with the difference (in days) between the date and the months's start
-      data = data.frame(difference = sapply(Date, function(date){an(substr(x = date, start = 9, stop = 10)) - 1}), calls = Calls)
+      # Declare as a time series ----
+      # Bind dates and calls per day
+      data = data.frame(dates = Date, calls = Calls)
       # Removing na's
       data = na.omit(data)
+      #dates = data$dates # use plot(x = dates, y = c(0,diff_data)) to plot the difference
+      # Days sequence
+      days = seq(as.Date(data$dates[1],"$Y-$M-$D"), as.Date(data$dates[length(data$dates)], "$Y-$M-$D"), by = "day")
+      start_year = an(substr(x = data$dates[1], start = 1, stop = 4))
+      # Time series
+      data = ts(data = data$calls, start = c(start_year, as.numeric(format(days[1], "%j"))), frequency = 365)
+      # Remove trend
+      diff_data = diff(data)
+      # Benchmark models
+      fit = snaive(diff_data)
+      summary(fit)
+      checkresiduals(fit)
+      fit_ets = ets(data)
+      summary(fit_ets)
+      checkresiduals(fit_ets)
+      fit_arima = auto.arima(data)#, d = 1, D = 1, stepwise = F, approximation = F, trace = T)
+      summary(fit_arima)
+      checkresiduals(fit_arima)
 
       # Predictions ----
-      predictions = list()
-      if("random forest" %in% cfg$process$models){predictions = append(predictions, predictRF(data))}
+      #predictions = list()
+      #if("arima" %in% cfg$process$models){predictions = append(predictions, arima(data))}
+
+
 
       # Name for each var
       #names(predictions) = bla
