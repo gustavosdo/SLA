@@ -23,26 +23,19 @@
     "threads": 7
   },
   "process":{
-    "run_process": false,
-    "customers": ["",""],
+    "run_process": true,
+    "customers": null,
 	  "days_prediction": "2",
 	  "next_days": true,
 	  "last_days": false,
-    "models": ["neural_network", ""],
+    "models": ["neural network", "random forest"],
     "scenarios":{
       "combine_models": false,
       "models_combinations": ["",""]
-    },
-    "neural_network": {
-      "activation_function": null,
-      "hidden_layers": null,
-      "loss_function": null,
-      "neurons_per_hidden_layer": 10,
-      "target_column": "slaStatus"
     }
   },
   "post_process":{
-    "run_postprocess": true,
+    "run_postprocess": false,
     "plot_histo_dates": {
       "run_module": true,
       "axes_names": ["Number of calls", "Date"],

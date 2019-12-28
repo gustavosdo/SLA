@@ -64,12 +64,9 @@ SLA = function(config_json_filename = NULL){
   if (cfg$process$run_process){
 
     print('Process modules') # WIP
-    # Neural network module
-    #if ("neural_network" %in% cfg$process$models){
-      # Change it in order to allow the preview for 2 days inside the dataset
-      #print('Acessing neural network processing module.')
-      solutions = predictions(cfg = cfg, customersData = customersData)
-    #}
+
+    # Change the data source in order to allow the preview for 2 days inside the dataset
+    solutions = predictions(cfg = cfg, customersData = customersData)
   }
 
   # Post processing module

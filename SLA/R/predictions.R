@@ -1,5 +1,5 @@
-#' @title Preview of number of calls and closed calls based on a neural network algorithm
-#' @name neuralNetwork
+#' @title Preview of number of calls and closed calls based on various algorithms
+#' @name predictions
 #'
 #' @description This module receives the all calls and closed calls for a
 #' given date range and returns the expected value of calls and closed calls
@@ -8,55 +8,68 @@
 #' @param cfg A json with configuration data
 #' @param dataset The dataset with all customers information
 #'
-#' @return solution A vector with the SLA preview done with neural network
+#' @return solution A vector with the SLA preview
 #'
-#' @import mlr RWeka mda modeltools ranger
+#' @import parallel foreach doParallel
 
 predictions = function(cfg, customersData){
 
-  # Run over customers calls ----
-  for (iter_customer in customersData[1:length(customersData)]){
-    Calls = list()
-    customer = names(iter_customer)
-    Calls_df = iter_customer[[1]]$closeds
-    for (iter_col in 1:ncol(Calls_df)){
-      for (iter_row in 1:nrow(Calls_df)){
-        iter_call = Calls_df[iter_row, iter_col]
-        Calls = append(Calls, iter_call)
-      } # row iteration close ----
-    } # col iteration ----
+  # Unpacking customersData ----
+  customersData = unlist(customersData, recursive = F)
 
-    # Get a vector of values in order to pass to the prediction function
-    Calls = unlist(Calls)
-    Calls = data.frame(Calls)
-    colnames(Calls) = "Calls"
-    Calls = na.omit(Calls)
+  # Customers to be included in the predictions ----
+  customers = cfg$process$customers
+  if (is.null(customers)){customers = names(customersData)}
 
-    # Create a regression task
-    regr.task = makeRegrTask(data = Calls, target = "Calls")
+  # Variables (targets) to be included in the prediction ----
+  variables = c("closeds", "allTickets")
 
-    # Global seed ----
-    set.seed(999)
+  # Parallel loop over customers ----
+  foreach (customer = customers[1:length(customers)], .packages = c('devtools'), .export = c("variables", "customersData")) %dopar% {
+    load_all()
+    # Loop over variables ----
+    for (variable in variables){
+      Calls = list()
+      Date = list()
+      Calls_df = customersData[customer][[1]][variable][[1]]
+      # Loop over date ----
+      for (iter_col in 1:ncol(Calls_df)){
+        iter_col_name = colnames(Calls_df)[iter_col]
+        for (iter_row in 1:nrow(Calls_df)){
+          iter_row_name = ifelse( nchar(ac(iter_row)) == 1, paste0('0', ac(iter_row)), ac(iter_row))
+          iter_date = paste0(iter_col_name, '-', iter_row_name)
+          iter_call = Calls_df[iter_row, iter_col]
+          Calls = append(Calls, iter_call)
+          Date = append(Date, iter_date)
+        } # row iteration
+      } # col iteration
 
-    # Random forest prediction ----
-    # Phase space
-    ps_rf = makeParamSet(makeIntegerParam("num.trees", lower = 1L, upper = 200L))
-    # resampling strategy
-    rdesc = makeResampleDesc("CV", iters = 5L)
-    # Performance measure
-    meas = rmse
-    # Tuning method
-    ctrl = makeTuneControlCMAES(budget = 100L)
-    # Learner
-    tunedRF = makeTuneWrapper(learner = "regr.ranger", resampling = rdesc, measures = meas,
-                              par.set = ps_rf, control = ctrl, show.info = FALSE)
-    lrns = list(makeLearner("regr.lm"), tunedRF)
-    # Conduct the benchmark experiment
-    bmr = benchmark(learners = lrns, tasks = regr.task, resamplings = rdesc, measures = rmse,
-                    show.info = FALSE)
-    # Evaluate the results
-    getBMRAggrPerformances(bmr)
+      # Get a vector of values in order to pass to a plot function
+      Calls = unlist(Calls)
+      Date = unlist(Date)
 
-  } # for each customer close ----
+      # Fixing the format
+      Date = as.Date(Date)
 
+      # Building the correct data frame to send to processing algorithms ----
+      # Building a vector with the difference (in days) between the date and the months's start
+      data = data.frame(difference = sapply(Date, function(date){an(substr(x = date, start = 9, stop = 10)) - 1}), calls = Calls)
+      # Removing na's
+      data = na.omit(data)
+
+      # Predictions ----
+      predictions = list()
+      if("random forest" %in% cfg$process$models){predictions = append(predictions, predictRF(data))}
+
+      # Name for each var
+      #names(predictions) = bla
+
+    } # var iteration
+
+    # Name for each customer
+    #names(predictions) = bla
+
+  } # for each (customer)
+
+  #return(predictions)
 }
