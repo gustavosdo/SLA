@@ -73,6 +73,9 @@ predictions = function(cfg, customersData){
       summary(fit_arima)
       checkresiduals(fit_arima)
 
+      # Forecast with arima
+      fcst = forecast(fit_arima, h = 2)
+
       # Predictions ----
       #predictions = list()
       #if("arima" %in% cfg$process$models){predictions = append(predictions, arima(data))}
