@@ -10,9 +10,15 @@
 #'
 #' @return solution A vector with the SLA preview
 #'
-#' @import parallel foreach doParallel fpp2 xts
+#' @import parallel foreach doParallel fpp2 xts zoo dplyr scales
 
 predictions = function(cfg, customersData){
+
+  # Parallelism setup ----
+  threads = cfg$pre_process$threads
+  cl <- parallel::makeCluster(threads, type = 'SOCK', outfile = "")
+  doParallel::registerDoParallel(cl)
+  on.exit(stopCluster(cl))
 
   # Unpacking customersData ----
   customersData = unlist(customersData, recursive = F)
@@ -25,8 +31,8 @@ predictions = function(cfg, customersData){
   variables = c("closeds", "allTickets")
 
   # Parallel loop over customers ----
-  foreach (customer = customers[1:length(customers)], .packages = c('devtools'), .export = c("variables", "customersData")) %dopar% {
-    load_all()
+  foreach (customer = customers[1:length(customers)], .packages = c('devtools', 'xts'), .export = c("variables", "customersData")) %dopar% {
+    load_all(quiet = T)
     # Loop over variables ----
     for (variable in variables){
       Calls = list()
@@ -54,39 +60,10 @@ predictions = function(cfg, customersData){
       data = data.frame(dates = Date, calls = Calls)
       # Removing na's
       data = na.omit(data)
-      #dates = data$dates # use plot(x = dates, y = c(0,diff_data)) to plot the difference
-      # Days sequence
-      days = seq(as.Date(data$dates[1], "%y-%m-%d"), as.Date(data$dates[length(data$dates)], "%y-%m-%d"), by = "day")
-      #start_year = an(substr(x = data$dates[1], start = 1, stop = 4))
       # Time series
-      ts_data = zoo(x = data$calls, order.by = data$dates, frequency = 1)
-      ts_data = ts(data = data$calls, start = c(start_year, as.numeric(format(days[1], "%j"))), frequency = 365, deltat = 1/365)
-      ts_data = xts(x = data$calls, order.by = days, frequency = 1)
+      ts_data = xts(x = data$calls, order.by = data$dates, frequency = 1)
       # Remove trend
       diff_ts_data = diff(ts_data)
-      # Benchmark models
-      fit = snaive(diff_ts_data)
-      summary(fit)
-      checkresiduals(fit)
-      fit_ets = ets(ts_data)
-      summary(fit_ets)
-      checkresiduals(fit_ets)
-      fit_arima = auto.arima(ts_data)#, d = 1, D = 1, stepwise = F, approximation = F, trace = T)
-      summary(fit_arima)
-      checkresiduals(fit_arima)
-
-      # Forecast with arima
-      fcst = forecast(fit_arima, h = 20)
-      # Forecast with ETS
-      fcst = forecast(fit_ets, h = 20)
-      # Forecast with snaive
-      fcst = forecast(fit, h = 2)
-
-      # Predictions ----
-      #predictions = list()
-      #if("arima" %in% cfg$process$models){predictions = append(predictions, arima(data))}
-
-
 
       # Name for each var
       #names(predictions) = bla
