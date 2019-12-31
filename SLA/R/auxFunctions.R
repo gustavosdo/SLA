@@ -28,3 +28,10 @@ elapsedMonths = function(start_date, end_date) {
   sd = as.POSIXlt(start_date)
   return(12 * (ed$year - sd$year) + (ed$mon - sd$mon))
 }
+
+translateWeekDays = function(weekDays){
+  pt_br_days = c("segunda", "terça", "quarta", "quinta", "sexta", "sábado", "domingo")
+  en_days = c("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+
+  return(unlist(lapply(weekDays, function(day){en_days[which(pt_br_days == day)]})))
+}

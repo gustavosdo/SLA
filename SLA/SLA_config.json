@@ -25,10 +25,7 @@
   "process":{
     "run_process": true,
     "customers": null,
-	  "days_prediction": "2",
-	  "next_days": true,
-	  "last_days": false,
-    "models": ["", ""]
+	  "days_prediction": "2019-02-28"
   },
   "post_process":{
     "run_postprocess": false,

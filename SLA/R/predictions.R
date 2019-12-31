@@ -35,35 +35,30 @@ predictions = function(cfg, customersData){
     load_all(quiet = T)
     # Loop over variables ----
     for (variable in variables){
-      Calls = list()
-      Date = list()
+      # Data frame of a specific variable and customer
       Calls_df = customersData[customer][[1]][variable][[1]]
-      # Loop over date ----
-      for (iter_col in 1:ncol(Calls_df)){
-        iter_col_name = colnames(Calls_df)[iter_col]
-        for (iter_row in 1:nrow(Calls_df)){
-          iter_row_name = ifelse( nchar(ac(iter_row)) == 1, paste0('0', ac(iter_row)), ac(iter_row))
-          iter_date = paste0(iter_col_name, '-', iter_row_name)
-          iter_call = Calls_df[iter_row, iter_col]
-          Calls = append(Calls, iter_call)
-          Date = append(Date, iter_date)
-        } # row iteration
-      } # col iteration
-
-      # Get a vector of values and fix format ----
-      Calls = unlist(Calls)
-      Date = unlist(Date)
-      Date = as.Date(Date)
+      # Vector of number of calls per day
+      calls = na.omit(as.numeric(unlist(sapply(colnames(Calls_df), function(x){Calls_df[x]}))))
+      # All days between start and end of date range
+      dates = seq(from = as.Date(cfg$pre_process$initial_date), to = as.Date(cfg$pre_process$end_date), by = "day")
+      # Determine the week day for each date
+      weekDays = sapply(dates, function(x){weekdays(x = x)})
+      weekDays = translateWeekDays(weekDays = weekDays)
 
       # Declare as a time series ----
       # Bind dates and calls per day
-      data = data.frame(dates = Date, calls = Calls)
+      data = data.frame(weekdays = weekDays, dates = dates, calls = calls)
       # Removing na's
       data = na.omit(data)
-      # Time series
-      ts_data = xts(x = data$calls, order.by = data$dates, frequency = 1)
-      # Remove trend
-      diff_ts_data = diff(ts_data)
+
+      # Prediction ----
+      # We use a prediction based on the weighted mean of precedent values
+      delta_calls = unlist(lapply(1:length(data$calls), function(j){data$calls[j] - data$calls[j-1]})) # removing trend
+      delta_calls = c(NA, delta_calls) # adding a NA for the first entry as it is not possible to define delta_calls[1]
+      data = cbind(data, delta_calls) # binding delta calls to data frame
+      data$delta_calls[which(substr(data$dates, 9, 10) == "01")] = NA # adding a NA to the first day of every month
+
+      # Loop over all the days to be predicted
 
       # Name for each var
       #names(predictions) = bla
