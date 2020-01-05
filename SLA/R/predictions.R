@@ -52,13 +52,22 @@ predictions = function(cfg, customersData){
       data = na.omit(data)
 
       # Prediction ----
-      # We use a prediction based on the weighted mean of precedent values
+      # We use a prediction based on the (not yet) weighted mean of precedent values
       delta_calls = unlist(lapply(1:length(data$calls), function(j){data$calls[j] - data$calls[j-1]})) # removing trend
       delta_calls = c(NA, delta_calls) # adding a NA for the first entry as it is not possible to define delta_calls[1]
       data = cbind(data, delta_calls) # binding delta calls to data frame
       data$delta_calls[which(substr(data$dates, 9, 10) == "01")] = NA # adding a NA to the first day of every month
 
-      # Loop over all the days to be predicted
+      # Loop over all the days to be predicted ----
+      # days_prediction must start with the immediate next day wrt the original data
+      # This behaviour must be changed in future in order to generalize the algorithm
+      for (day in cfg$process$days_prediction){
+        weekday = translateWeekDays(as.list(weekdays(as.Date(day))))
+        delta_calls_mean = mean(data$calls[data$weekdays == weekday], na.rm = T)
+        # create a row with the same structure from data
+        # bind this row with data
+        # For future versions: insert an estimate for the error (statistical an systematic)
+      }
 
       # Name for each var
       #names(predictions) = bla
