@@ -30,6 +30,10 @@ predictions = function(cfg, customersData){
   # Variables (targets) to be included in the prediction ----
   variables = c("closeds", "allTickets")
 
+  # Work days and weekend (for line 69)
+  workdays = c("monday", "tuesday", "wednesday", "thursday", "friday")
+  weekend = c("saturday", "sunday")
+
   # Parallel loop over customers ----
   foreach (customer = customers[1:length(customers)], .packages = c('devtools', 'xts'), .export = c("variables", "customersData")) %dopar% {
     load_all(quiet = T)
@@ -57,14 +61,25 @@ predictions = function(cfg, customersData){
       delta_calls = c(NA, delta_calls) # adding a NA for the first entry as it is not possible to define delta_calls[1]
       data = cbind(data, delta_calls) # binding delta calls to data frame
       data$delta_calls[which(substr(data$dates, 9, 10) == "01")] = NA # adding a NA to the first day of every month
+      prediction = data
 
       # Loop over all the days to be predicted ----
       # days_prediction must start with the immediate next day wrt the original data
       # This behaviour must be changed in future in order to generalize the algorithm
       for (day in cfg$process$days_prediction){
+        # Weekday
         weekday = translateWeekDays(as.list(weekdays(as.Date(day))))
-        delta_calls_mean = mean(data$calls[data$weekdays == weekday], na.rm = T)
+        # Mean of delta calls for each class of day
+        dcm_wkday = mean(data$delta_calls[data$weekdays == weekday], na.rm = T)
+        dcm_work = mean(data$delta_calls[data$weekdays %in% workdays], na.rm = T)
+        dcm_wkend = mean(data$delta_calls[data$weekdays %in% weekend], na.rm = T)
+        dcm_stday = mean(data$delta_calls[data$weekdays == "saturday"], na.rm = T)
+        dcm_snday = mean(data$delta_calls[data$weekdays == "sunday"], na.rm = T)
+        # Find out the weights set in order to obtain the results in data
+        wgts = solverWeights(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday)
+
         # create a row with the same structure from data
+
         # bind this row with data
         # For future versions: insert an estimate for the error (statistical an systematic)
       }
