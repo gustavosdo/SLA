@@ -75,8 +75,10 @@ predictions = function(cfg, customersData){
         dcm_wkend = mean(data$delta_calls[data$weekdays %in% weekend], na.rm = T)
         dcm_stday = mean(data$delta_calls[data$weekdays == "saturday"], na.rm = T)
         dcm_snday = mean(data$delta_calls[data$weekdays == "sunday"], na.rm = T)
+        # Delta calls for the last day in the same class
+        lastwk_result = data$delta_calls[data$weekdays == weekday][length(data$delta_calls[data$weekdays == weekday])]
         # Find out the weights set in order to obtain the results in data
-        wgts = solverWeights(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday)
+        wgts = solverWeights(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday, lastwk_result)
 
         # create a row with the same structure from data
 
