@@ -4,12 +4,13 @@
 solverWeights = function(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday, lastwk_result){
 
   # Objective is the mean of delta calls of the same weekday
-  obj = c(dcm_wkday, dcm_work, dcm_wkend, dcm_stday)
+  obj = c(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday, -lastwk_result)
   # Matrix of constrainsts
-  const = c(1, 1, 1, 1, 1)
-  mat = matrix(data = const, nrow = 1)
+  const = c(1, 1, 1, 1, 1, 0,
+            0, 0, 0, 0, 0, 1)
+  mat = matrix(data = const, ncol = 6, nrow = 2, byrow = T)
   # The sum of weighted means must be equal to the last result
-  rhs = lastwk_result
+  rhs = matrix(c(1, 0), ncol = 1, nrow = 2)
   # Upper bound is 1 for all
   ub = rep(1, length(const))
   # Lower bound is 0
@@ -19,5 +20,5 @@ solverWeights = function(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday, l
                 upper = list(ind=1:length(ub), val=ub))
 
   # Rsymphony solver call
-  x = Rsymphony_solve_LP(obj = obj, mat = mat, dir = "==", rhs = rhs, bounds = bounds, max = T)
+  x = Rsymphony_solve_LP(obj = obj, mat = mat, dir = rep("==", nrow(rhs)), rhs = rhs, bounds = bounds, max = F)
 }
