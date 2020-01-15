@@ -56,35 +56,55 @@ predictions = function(cfg, customersData){
       data = na.omit(data)
 
       # Prediction ----
-      # We use a prediction based on the (not yet) weighted mean of precedent values
-      delta_calls = unlist(lapply(1:length(data$calls), function(j){data$calls[j] - data$calls[j-1]})) # removing trend
-      delta_calls = c(NA, delta_calls) # adding a NA for the first entry as it is not possible to define delta_calls[1]
-      data = cbind(data, delta_calls) # binding delta calls to data frame
-      data$delta_calls[which(substr(data$dates, 9, 10) == "01")] = NA # adding a NA to the first day of every month
-      prediction = data
-
-      # Loop over all the days to be predicted ----
-      # days_prediction must start with the immediate next day wrt the original data
-      # This behaviour must be changed in future in order to generalize the algorithm
       for (day in cfg$process$days_prediction){
-        # Weekday
         weekday = translateWeekDays(as.list(weekdays(as.Date(day))))
-        # Mean of delta calls for each class of day
-        dcm_wkday = mean(data$delta_calls[data$weekdays == weekday], na.rm = T)
-        dcm_work = mean(data$delta_calls[data$weekdays %in% workdays], na.rm = T)
-        dcm_wkend = mean(data$delta_calls[data$weekdays %in% weekend], na.rm = T)
-        dcm_stday = mean(data$delta_calls[data$weekdays == "saturday"], na.rm = T)
-        dcm_snday = mean(data$delta_calls[data$weekdays == "sunday"], na.rm = T)
-        # Delta calls for the last day in the same class
-        lastwk_result = data$delta_calls[data$weekdays == weekday][length(data$delta_calls[data$weekdays == weekday])]
-        # Find out the weights set in order to obtain the results in data
-        wgts = solverWeights(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday, lastwk_result)
+        if (weekday %in% workdays){
+          data = data[data$weekdays %in% workdays,]
+        } else {
+          data = data[data$weekdays %in% weekend,]
+        }
 
-        # create a row with the same structure from data
+        # Linear regression
 
-        # bind this row with data
-        # For future versions: insert an estimate for the error (statistical an systematic)
+        # Define prediction for day
+
+        # Statistical error calculation
+
+        # Some kind of systematic error
       }
+
+      # For tests:
+      #plot(x = as.Date(data$dates[data$weekdays %in% weekend]), y = data$calls[data$weekdays %in% weekend])
+
+      # We use a prediction based on the (not yet) weighted mean of precedent values
+      #delta_calls = unlist(lapply(1:length(data$calls), function(j){data$calls[j] - data$calls[j-1]})) # removing trend
+      #delta_calls = c(NA, delta_calls) # adding a NA for the first entry as it is not possible to define delta_calls[1]
+      #data = cbind(data, delta_calls) # binding delta calls to data frame
+      #data$delta_calls[which(substr(data$dates, 9, 10) == "01")] = NA # adding a NA to the first day of every month
+      #prediction = data
+
+      # # Loop over all the days to be predicted ----
+      # # days_prediction must start with the immediate next day wrt the original data
+      # # This behaviour must be changed in future in order to generalize the algorithm
+      # for (day in cfg$process$days_prediction){
+      #   # Weekday
+      #   weekday = translateWeekDays(as.list(weekdays(as.Date(day))))
+      #   # Mean of delta calls for each class of day
+      #   dcm_wkday = mean(data$delta_calls[data$weekdays == weekday], na.rm = T)
+      #   dcm_work = mean(data$delta_calls[data$weekdays %in% workdays], na.rm = T)
+      #   dcm_wkend = mean(data$delta_calls[data$weekdays %in% weekend], na.rm = T)
+      #   dcm_stday = mean(data$delta_calls[data$weekdays == "saturday"], na.rm = T)
+      #   dcm_snday = mean(data$delta_calls[data$weekdays == "sunday"], na.rm = T)
+      #   # Delta calls for the last day in the same class
+      #   lastwk_result = data$delta_calls[data$weekdays == weekday][length(data$delta_calls[data$weekdays == weekday])]
+      #   # Find out the weights set in order to obtain the results in data
+      #   wgts = solverWeights(dcm_wkday, dcm_work, dcm_wkend, dcm_stday, dcm_snday, lastwk_result)
+      #
+      #   # create a row with the same structure from data
+      #
+      #   # bind this row with data
+      #   # For future versions: insert an estimate for the error (statistical an systematic)
+      # }
 
       # Name for each var
       #names(predictions) = bla

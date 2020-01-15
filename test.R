@@ -13,3 +13,9 @@ dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$
                    header = cfg$pre_process$exist_header)
 
 load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
+
+#
+
+customer = customers[1]
+variable = variables[1]
+day = cfg$process$days_prediction[1]
