@@ -10,15 +10,9 @@
 #'
 #' @return solution A vector with the SLA preview
 #'
-#' @import parallel foreach doParallel fpp2 xts zoo dplyr scales
+#' @import
 
 predictions = function(cfg, customersData){
-
-  # Parallelism setup ----
-  threads = cfg$pre_process$threads
-  cl <- parallel::makeCluster(threads, type = 'SOCK', outfile = "")
-  doParallel::registerDoParallel(cl)
-  on.exit(stopCluster(cl))
 
   # Unpacking customersData ----
   customersData = unlist(customersData, recursive = F)
@@ -35,8 +29,7 @@ predictions = function(cfg, customersData){
   weekend = c("saturday", "sunday")
 
   # Parallel loop over customers ----
-  foreach (customer = customers[1:length(customers)], .packages = c('devtools', 'xts'), .export = c("variables", "customersData")) %dopar% {
-    load_all(quiet = T)
+  for (customer in customers) {
     # Loop over variables ----
     for (variable in variables){
       # Data frame of a specific variable and customer
@@ -83,14 +76,15 @@ predictions = function(cfg, customersData){
         pred_error = round(sqrt( (a_err)**2 + (an(substr(day, 9, 10))*b_err)**2))
 
         # Some kind of systematic error (TBD)
-      }
 
+        # Predictions data frame
+        if (!is.object(predictions)){
+          predictions = data.frame(customer = customer, variable = variable, day = day, value = prediction, error = pred_error)
+        } else {
+          predictions = rbind(predictions, c(customer, variable, day, prediction, pred_error))
+        }
+      } # day prediction iteration
     } # var iteration
-
-    # Name for each customer
-    #names(predictions) = bla
-
-  } # for each (customer)
-
-  #return(predictions)
+  } # customer iteration
+  return(predictions)
 }
