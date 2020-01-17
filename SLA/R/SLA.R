@@ -63,10 +63,13 @@ SLA = function(config_json_filename = NULL){
   # Processing module
   if (cfg$process$run_process){
 
-    print('Process modules') # WIP
+    print('Process modules')
 
     # Change the data source in order to allow the preview for 2 days inside the dataset
     solutions = predictions(cfg = cfg, customersData = customersData)
+
+    # Return the values for each day in console
+    print(solutions)
   }
 
   # Post processing module

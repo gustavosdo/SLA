@@ -1,5 +1,5 @@
 #' @title Preview of number of calls and closed calls based on various algorithms
-#' @name predictions
+#' @name ticketsPredictions
 #'
 #' @description This module receives the all calls and closed calls for a
 #' given date range and returns the expected value of calls and closed calls
@@ -17,7 +17,7 @@ predictions = function(cfg, customersData){
   # Unpacking customersData ----
   customersData = unlist(customersData, recursive = F)
 
-  # Customers to be included in the predictions ----
+  # Customers to be included in the ticketsPredictions ----
   customers = cfg$process$customers
   if (is.null(customers)){customers = names(customersData)}
 
@@ -38,6 +38,7 @@ predictions = function(cfg, customersData){
       calls = na.omit(as.numeric(unlist(sapply(colnames(Calls_df), function(x){Calls_df[x]}))))
       # All days between start and end of date range
       dates = seq(from = as.Date(cfg$pre_process$initial_date), to = as.Date(cfg$pre_process$end_date), by = "day")
+
       # Determine the week day for each date
       weekDays = sapply(dates, function(x){weekdays(x = x)})
       weekDays = translateWeekDays(weekDays = weekDays)
@@ -63,11 +64,12 @@ predictions = function(cfg, customersData){
         data = data.frame(x = an(substr(data$dates, 9, 10)), y = data$calls)
 
         # Linear regression
-        linReg = lm(y~x, data) # y = a + b*x
+        linReg = lm(y~x, data = data) # y = a + b*x
         a = linReg$coefficients[[1]]
         b = linReg$coefficients[[2]]
         a_err = summary(linReg)[4][[1]][[3]]
         b_err = summary(linReg)[4][[1]][[4]]
+        rm(linReg); gc()
 
         # Define prediction for day
         prediction = round(a + an(substr(day, 9, 10))*b)
@@ -77,14 +79,15 @@ predictions = function(cfg, customersData){
 
         # Some kind of systematic error (TBD)
 
-        # Predictions data frame
-        if (!is.object(predictions)){
-          predictions = data.frame(customer = customer, variable = variable, day = day, value = prediction, error = pred_error)
+        # ticketsPredictions data frame
+        if (!exists("ticketsPredictions")){
+          ticketsPredictions = data.frame(customer = customer, variable = variable, day = day, value = prediction, error = pred_error)
         } else {
-          predictions = rbind(predictions, c(customer, variable, day, prediction, pred_error))
+          ticketsPredictions = rbind(ticketsPredictions, data.frame(customer = customer, variable = variable, day = day, value = prediction, error = pred_error))
         }
       } # day prediction iteration
     } # var iteration
   } # customer iteration
-  return(predictions)
+  ticketsPredictions = predictSLA(ticketsPredictions = ticketsPredictions)
+  return(ticketsPredictions)
 }
