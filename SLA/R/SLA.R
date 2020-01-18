@@ -2,17 +2,20 @@
 #' @name SLA
 #'
 #' @description This function is the wrapper of the SLA package.
-#' The preprocessing, processing and postprocessing modules are called during the execution of this wrapper.
+#' The preprocessing, processing and postprocessing modules are called during
+#' the execution of this wrapper.
 #'
 #' @param config_json_filename The json file containing all parameters.
 #'
-#' @return No value is returned. The parameters define the need of output plots, tables, etc.
+#' @return No value is returned. The parameters define the need of output plots,
+#' tables, etc.
 #'
 #' @import jsonlite devtools
 
 SLA = function(config_json_filename = NULL){
 
-  # Checking the configuration jason filename
+  # Initial setup --------------------------------------------------------------
+  # Checking the configuration json filename
   if (is.null(config_json_filename)){
     stop("Use config_json_filename argument!")
   }
@@ -26,7 +29,7 @@ SLA = function(config_json_filename = NULL){
   # Setup folder
   dirs = setupFolder(cfg = cfg)
 
-  # Preprocessing module
+  # Preprocessing module -------------------------------------------------------
   if (cfg$pre_process$run_preprocess){
 
     # Read data
@@ -42,37 +45,62 @@ SLA = function(config_json_filename = NULL){
 
     # Saving the resultant preprocessed dataset
     write.csv(x = dataset,
-              file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename))
+              file = paste0(cfg$folders$preprocessed, 'preprocessed_',
+                            cfg$pre_process$filename))
 
     # Saving the SLA per user object
-    save(customersData, file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
+    save(customersData, file = paste0(cfg$folders$preprocessed,
+                                      'customersData.RData'))
 
     # Saving the cfg used
     save(cfg, file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
 
   } else {
 
-    # Load all preprocessed data
-    dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
+    # Load all preprocessed data -----------------------------------------------
+    dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_',
+                                     cfg$pre_process$filename),
                        header = cfg$pre_process$exist_header)
 
     load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))
 
   } # else of if preprocessing flag
 
-  # Processing module
+  # Processing module ----------------------------------------------------------
   if (cfg$process$run_process){
 
     print('Process modules')
 
-    # Change the data source in order to allow the preview for 2 days inside the dataset
+    # Perform the predictions
     solutions = predictions(cfg = cfg, customersData = customersData)
 
-    # Return the values for each day in console
-    print(solutions)
+    # Save the values for each day and customer
+    save(solutions, file = paste0(cfg$folders$processed, 'solutions.RData'))
+
+    # Determine accuracy -------------------------------------------------------
+    # customersData without the last two days
+    cfgTest = cfg # Copy the cfg in order to change some parameters harmlessly
+    endTime = substr(x = cfg$pre_process$end_date, start = 12, stop = 19)
+    cfgTest$pre_process$end_date = paste(as.Date(cfg$pre_process$end_date) - 2,
+                                          endTime)
+    cfgTest$process$days_prediction = ac(as.Date(cfg$pre_process$end_date) - 1)
+    customersDataTest = calcSLA(dataset = dataset, cfg = cfgTest)
+
+    # Determine the solution for a shorter time range
+    solutionsTest = predictions(cfg = cfgTest,customersData = customersDataTest)
+
+    # Build a code in order to perform the following two tests # WIP
+
+    # Student's t test-like (t' = (A-B) / sqrt(deltaA**2 + deltaB**2))
+
+    # Relative accuracy (D = (A-B)/A)
+
+  } else {
+    # Load the previously done predictions for each day and customer -----------
+    load(file = paste0(cfg$folders$processed, 'solutions.RData'))
   }
 
-  # Post processing module
+  # Post processing module -----------------------------------------------------
   if (cfg$post_process$run_postprocess){
     if (cfg$post_process$plot_sla$run_module){
       plotSLAs(cfg, customersData)
