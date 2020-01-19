@@ -71,7 +71,7 @@ SLA = function(config_json_filename = NULL){
 
     print('Process modules')
 
-    # Perform the predictions
+    # Perform the predictions --------------------------------------------------
     solutions = predictions(cfg = cfg, customersData = customersData)
 
     # Save the values for each day and customer
@@ -89,15 +89,21 @@ SLA = function(config_json_filename = NULL){
     # Determine the solution for a shorter time range
     solutionsTest = predictions(cfg = cfgTest,customersData = customersDataTest)
 
-    # Build a code in order to perform the following two tests # WIP
+    # Two accuracy tests
+    accTests = accuracy(customersData = customersData,
+                        solutionsTest = solutionsTest,
+                        dayTest = cfgTest$process$days_prediction,
+                        cfg = cfg)
 
-    # Student's t test-like (t' = (A-B) / sqrt(deltaA**2 + deltaB**2))
-
-    # Relative accuracy (D = (A-B)/A)
+    # Save the tests results for each day and customer
+    save(accTests, file = paste0(cfg$folders$processed, 'accTests.RData'))
 
   } else {
     # Load the previously done predictions for each day and customer -----------
     load(file = paste0(cfg$folders$processed, 'solutions.RData'))
+
+    # Load the tests results for each day and customer -------------------------
+    load(file = paste0(cfg$folders$processed, 'accTests.RData'))
   }
 
   # Post processing module -----------------------------------------------------

@@ -6,7 +6,7 @@
     "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/"
   },
   "pre_process": {
-    "run_preprocess": false,
+    "run_preprocess": true,
     "filename": "ticket_cientista.csv",
     "exist_header": true,
     "separator": ";",
@@ -28,7 +28,7 @@
 	  "days_prediction": ["2019-02-28"]
   },
   "post_process":{
-    "run_postprocess": false,
+    "run_postprocess": true,
     "plot_histo_dates": {
       "run_module": true,
       "axes_names": ["Number of calls", "Date"],
