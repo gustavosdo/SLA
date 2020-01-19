@@ -1,7 +1,4 @@
-# Objetivo:
-O objetivo deste desafio é permitir a melhor avaliação das suas habilidades como candidato a vaga de Data Scientist. Este desafio deve ser feito individualmente.
-
-# Enunciado do Teste
+# Descrição
 
 SLA (Service Level Agreement) é uma métrica que indica se um chamado fechado foi atendido dentro do tempo contratado ou não.
 
@@ -16,12 +13,6 @@ Os dados fornecidos são de 01 de Janeiro de 2019 até 26 de Fevereiro de 2019. 
   * Para identificar qual  ticket ja foi fechado , usa-se a coluna “callStatus”, onde os status fechados são: N0, N4 e CV.
   * Para identificar quais tickets foram fechados dentro ou fora do SLA , usa-se a coluna “onTimeSolution”(S = foi fechado dentro e N = não foi fechado dentro)
 
-  ## São avaliados:
-  * Algoritmo utilizado
-  * Acuracidade do modelo: métricas utilizadas
-  * Organização do código( será avaliado no GIT)
-  * Visualizações geradas
-
-  ## Extras (não obrigatório):
+  ## Extras:
   * Outros insights baseados nos dados fornecidos.
   * Exposição do modelo através de API (kubernetes ou IBM Cloud)
