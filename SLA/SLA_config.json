@@ -25,7 +25,7 @@
   "process":{
     "run_process": true,
     "customers": null,
-	  "days_prediction": ["2019-02-28"]
+	  "days_prediction": ["2019-03-01", "2019-02-28"]
   },
   "post_process":{
     "run_postprocess": true,

@@ -27,7 +27,7 @@ SLA = function(config_json_filename = NULL){
   cfg = fromJSON(config_json_filename)
 
   # Setup folder
-  dirs = setupFolder(cfg = cfg)
+  setupFolder(cfg = cfg)
 
   # Preprocessing module -------------------------------------------------------
   if (cfg$pre_process$run_preprocess){
