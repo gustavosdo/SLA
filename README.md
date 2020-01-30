@@ -9,5 +9,8 @@ The SLA at time t is calculated by the number of calls closed within the month u
 The developed code makes use of linear regression (more models TBA) in order to predict the SLA for future days using the
 present dataset as a training sample.
 
+## How to run
+An example of the lines used to run the code is on test.R file
+
   ## Extras (TBA):
   * Make use of API's (kubernetes or IBM Cloud)
