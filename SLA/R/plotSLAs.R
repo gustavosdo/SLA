@@ -8,6 +8,8 @@
 #'
 #' @return Do not return any output. All plots are saved in the folder defined by cfg
 #'
+#' @import ggplot2 ggExtra
+#'
 
 plotSLAs = function(cfg, customersData)
 {
@@ -37,11 +39,30 @@ plotSLAs = function(cfg, customersData)
     Date = as.Date(Date)
 
     # Make the plot
-    png(filename = paste0(cfg$folders$postprocessed, 'SLA_', customer, '.png'))
-    plot(x = Date, y = SLA,
-         type = cfg$post_process$plot_sla$plot_type,
-         main = paste0('Customer ', customer), xlab = cfg$post_process$plot_sla$axes_names[2], ylab = cfg$post_process$plot_sla$axes_names[1])
-    dev.off()
+    if(cfg$post_process$plot_sla$plot_format == "png"){
+      # Name and size of plot
+      png(filename = paste0(cfg$folders$postprocessed, 'SLA_', customer, '.png'),
+          width = cfg$post_process$plot_sla$plot_size[1],
+          height = cfg$post_process$plot_sla$plot_size[2])
+      # Other graphical parameters
+      par(mai = rep(cfg$post_process$plot_sla$margin, 4))
+      plot(x = Date,
+           y = SLA,
+           type = cfg$post_process$plot_sla$plot_type,
+           main = paste0('Customer: ', customer),
+           xlab = cfg$post_process$plot_sla$axes_names[2],
+           ylab = cfg$post_process$plot_sla$axes_names[1],
+           frame.plot = cfg$post_process$plot_sla$frame_plot,
+           pch = cfg$post_process$plot_sla$plot_symbol,
+           col = cfg$post_process$plot_sla$color,
+           cex.lab = cfg$post_process$plot_sla$label_size,
+           cex.main = cfg$post_process$plot_sla$main_size,
+           cex = cfg$post_process$plot_sla$text_size,
+           cex.axis = cfg$post_process$plot_sla$axis_size,
+           #ylim = cfg$post_process$plot_sla$ylim,
+           lwd = cfg$post_process$plot_sla$line_width)
+      dev.off()
+    }
 
   } # for each (customer)
 } # top level
