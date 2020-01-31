@@ -74,8 +74,6 @@ predictions = function(cfg, customersData, verbose = F){
         if (cfg$process$linear_regression){
           # Linear regression module
           ticketsPredictions = linearRegressionTickets(dataset = iter_data)
-          # Unpacking results
-          #for (i in 1:length(linearReg)) {assign(names(linearReg)[i], linearReg[[i]])}
         }
 
         # Polynomial regression ----

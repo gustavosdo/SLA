@@ -11,21 +11,55 @@
 #'
 #' @return Values of linear function parameters and its errors
 #'
-#' @import
+#' @import reticulate
 
 linearRegressionB = function(x, y){
 
-  # Frequentist linear regression ----------------------------------------------
-  resF = linearRegressionF(x, y)
+  # summary statistics of sample
+  n    = length(x)
+  ybar = mean(y)
+  s2   = mean(x**2) - mean(x)**2
 
-  # Bayesian linear regression -------------------------------------------------
-  # P
+  # sample from the joint posterior (mu, tau | data)
+  mu     = rep(NA, 11000)
+  tau    = rep(NA, 11000)
+  T      = 1000    # burnin
+  tau[1] = 1  # initialisation
+  for(i in 2:11000) {
+    mu[i]  = rnorm(n = 1, mean = ybar, sd = sqrt(1 / (n * tau[i - 1])))
+    tau[i] = rgamma(n = 1, shape = n / 2, scale = 2 / ((n - 1) * s2 + n * (mu[i] - ybar)^2))
+  }
+  mu  = mu[-(1:T)]   # remove burnin
+  tau = tau[-(1:T)] # remove burnin
 
-  # Using random values to start the parameters
-  c0 = dnorm(x = seq(from = -0, to = 20, by = 1), mean = 0, sd = 100)
-  c1 = sample(x = -1000:1000, size = 1)
-  sd = sample(x = -1000:1000, size = 1)
-
+  # # Frequentist linear regression ----------------------------------------------
+  # resF = linearRegressionF(x, y)
+  # # Unpacking results
+  # c0_mean = resF$c0; c0_sd = resF$c0_sd
+  # c1_mean = resF$c1; c1_sd = resF$c1_sd
+  # var = resF$Chi2NDOF
   #
+  # # Bayesian linear regression -------------------------------------------------
+  # # Prior distributions based on frequentist result
+  # c0 = dnorm(x = seq(from = c0_mean - 3 * c0_sd,
+  #                    to = c0_mean + 3 * c0_sd,
+  #                    by = 6*c0_sd/cfg$process$bayes_nsteps),
+  #            mean = c0_mean,
+  #            sd = c0_sd)
+  # c1 = dnorm(x = seq(from = c1_mean - 3 * c1_sd,
+  #                    to = c1_mean + 3 * c1_sd,
+  #                    by = 6*c1_sd/cfg$process$bayes_nsteps),
+  #            mean = c1_mean,
+  #            sd = c1_sd)
+  # sd_range_max = max(c1_mean + 3 * c1_sd, c0_mean + 3 * c0_sd)
+  # sd = dnorm(x = seq(from = 0,
+  #                    to = sd_range_max,
+  #                    by = sd_range_max/cfg$process$bayes_nsteps),
+  #            mean = 0,
+  #            sd = sqrt(var))
+  # # Linear regression
+  # c1_pdfs = lapply(x, function(xi){xi*c1})
+  # c0_pdfs = lapply(x, function(xi){c0})
+  # mean = lapply(1:length(x), function(i){c0_pdfs[[i]] + c1_pdfs[[i]]})
 
 }
