@@ -37,11 +37,30 @@ plotCalls = function(cfg, customersData)
     Date = as.Date(Date)
 
     # Make the plot
-    png(filename = paste0(cfg$folders$postprocessed, 'AllCalls_', customer, '.png'))
-    plot(x = Date, y = Calls,
-         type = cfg$post_process$plot_histo_dates$plot_type,
-         main = paste0('Customer ', customer), xlab = cfg$post_process$plot_histo_dates$axes_names[2], ylab = cfg$post_process$plot_histo_dates$axes_names[1])
-    dev.off()
+    if(cfg$post_process$plot_calls$plot_format == "png"){
+      # Name and size of plot
+      png(filename = paste0(cfg$folders$postprocessed, 'AllCalls_', customer, '.png'),
+          width = cfg$post_process$plot_calls$plot_size[1],
+          height = cfg$post_process$plot_calls$plot_size[2])
+      # Other graphical parameters
+      par(mai = rep(cfg$post_process$plot_calls$margin, 4))
+      plot(x = Date,
+           y = Calls,
+           type = cfg$post_process$plot_calls$plot_type,
+           main = paste0('Customer: ', customer),
+           xlab = cfg$post_process$plot_calls$axes_names[2],
+           ylab = cfg$post_process$plot_calls$axes_names[1],
+           frame.plot = cfg$post_process$plot_calls$frame_plot,
+           pch = cfg$post_process$plot_calls$plot_symbol,
+           col = cfg$post_process$plot_calls$color,
+           cex.lab = cfg$post_process$plot_calls$label_size,
+           cex.main = cfg$post_process$plot_calls$main_size,
+           cex = cfg$post_process$plot_calls$text_size,
+           cex.axis = cfg$post_process$plot_calls$axis_size,
+           #ylim = cfg$post_process$plot_calls$ylim,
+           lwd = cfg$post_process$plot_calls$line_width)
+      dev.off()
+    }
 
   } # for each (customer)
 } # top level

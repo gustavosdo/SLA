@@ -6,7 +6,7 @@
     "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/"
   },
   "pre_process": {
-    "run_preprocess": false,
+    "run_preprocess": true,
     "filename": "ticket_cientista.csv",
     "exist_header": true,
     "separator": ";",
@@ -23,19 +23,51 @@
     "threads": 7
   },
   "process":{
-    "run_process": false,
+    "run_process": true,
     "customers": null,
-	  "days_prediction": ["2019-03-01", "2019-02-28"]
+	  "days_prediction": ["2019-02-27", "2019-02-28"],
+	  "linear_regression": true,
+	  "poly_regression": false,
+	  "poly_degree": 5,
+	  "decisiontree_regression": false
   },
   "post_process":{
     "run_postprocess": true,
-    "plot_histo_dates": {
-      "run_module": false,
-      "axes_names": ["Number of calls", "Date"],
-      "color_range": ["FF0000", "0000FF"],
-      "plot_type": "b",
-      "plot_size": [1080, 1920],
-      "plot_format": "png"
+    "plot_calls": {
+      "run_module": true,
+      "axes_names": ["Number of calls", "Calendar"],
+      "label_size": 2.0,
+      "main_size": 2.0,
+      "axis_size": 2.0,
+      "test_size": 2.0,
+      "symbol_size": 1.2,
+      "color": "red",
+      "plot_type": "h",
+      "plot_size": [800, 600],
+      "plot_format": "png",
+      "plot_symbol": 19,
+      "frame_plot": true,
+      "margin": 1.1,
+      "line_width": 3,
+      "ylim": [0, 1]
+    },
+    "plot_closed_calls": {
+      "run_module": true,
+      "axes_names": ["Number of closed calls", "Calendar"],
+      "label_size": 2.0,
+      "main_size": 2.0,
+      "axis_size": 2.0,
+      "test_size": 2.0,
+      "symbol_size": 1.2,
+      "color": "red",
+      "plot_type": "h",
+      "plot_size": [800, 600],
+      "plot_format": "png",
+      "plot_symbol": 19,
+      "frame_plot": true,
+      "margin": 1.1,
+      "line_width": 3,
+      "ylim": [0, 1]
     },
     "plot_sla": {
       "run_module": true,

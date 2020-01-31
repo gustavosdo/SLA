@@ -12,7 +12,7 @@
 #'
 #' @import
 
-predictions = function(cfg, customersData){
+predictions = function(cfg, customersData, verbose = F){
 
   # Unpacking customersData ----
   customersData = unlist(customersData, recursive = F)
@@ -35,9 +35,11 @@ predictions = function(cfg, customersData){
       # Data frame of a specific variable and customer
       Calls_df = customersData[customer][[1]][variable][[1]]
       # Vector of number of calls per day
-      calls = na.omit(as.numeric(unlist(sapply(colnames(Calls_df), function(x){Calls_df[x]}))))
+      calls = na.omit(as.numeric(unlist(sapply(colnames(Calls_df),
+                                               function(x){Calls_df[x]}))))
       # All days between start and end of date range
-      dates = seq(from = as.Date(cfg$pre_process$initial_date), to = as.Date(cfg$pre_process$end_date), by = "day")
+      dates = seq(from = as.Date(cfg$pre_process$initial_date),
+                  to = as.Date(cfg$pre_process$end_date), by = "day")
 
       # Determine the week day for each date
       weekDays = sapply(dates, function(x){weekdays(x = x)})
@@ -61,30 +63,25 @@ predictions = function(cfg, customersData){
         }
 
         # Creating data for linear regression
-        iter_data = data.frame(x = an(substr(iter_data$dates, 9, 10)), y = iter_data$calls)
+        iter_data = data.frame(x = an(substr(iter_data$dates, 9, 10)),
+                               y = iter_data$calls)
 
-        # Linear regression
-        print(paste("Customer:", customer, "; Variable:", variable, "; Day:", day))
-        linReg = lm(y~x, data = iter_data) # y = a + b*x
-        a = linReg$coefficients[[1]]
-        b = linReg$coefficients[[2]]
-        a_err = summary(linReg)[4][[1]][[3]]
-        b_err = summary(linReg)[4][[1]][[4]]
 
-        # Define prediction for day
-        prediction = round(a + an(substr(day, 9, 10))*b)
+        if(verbose){print(paste("Predicting: customer:", customer,
+                                "; variable:", variable, "; day:", day))}
 
-        # Statistical error calculation
-        pred_error = round(sqrt( (a_err)**2 + (an(substr(day, 9, 10))*b_err)**2))
-
-        # Some kind of systematic error (TBD)
-
-        # ticketsPredictions data frame
-        if (!exists("ticketsPredictions")){
-          ticketsPredictions = data.frame(customer = customer, variable = variable, day = day, value = prediction, error = pred_error)
-        } else {
-          ticketsPredictions = rbind(ticketsPredictions, data.frame(customer = customer, variable = variable, day = day, value = prediction, error = pred_error))
+        # Linear regression ----
+        if (cfg$process$linear_regression){
+          # Linear regression module
+          ticketsPredictions = linearRegressionTickets(dataset = iter_data)
+          # Unpacking results
+          #for (i in 1:length(linearReg)) {assign(names(linearReg)[i], linearReg[[i]])}
         }
+
+        # Polynomial regression ----
+        polyReg = polyRegression(dataset = iter_data,
+                                 degree = cfg$process$poly_degree)
+
       } # day prediction iteration
     } # var iteration
   } # customer iteration

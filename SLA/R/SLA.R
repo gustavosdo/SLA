@@ -26,7 +26,7 @@ SLA = function(config_json_filename = NULL){
   # Reading the json config
   cfg = fromJSON(config_json_filename)
 
-  # Setup folder
+  # Define and create folders of pre, post and processed files
   setupFolder(cfg = cfg)
 
   # Preprocessing module -------------------------------------------------------
@@ -111,8 +111,10 @@ SLA = function(config_json_filename = NULL){
     if (cfg$post_process$plot_sla$run_module){
       plotSLAs(cfg, customersData)
     }
-    if (cfg$post_process$plot_histo_dates$run_module){
+    if (cfg$post_process$plot_calls$run_module){
       plotCalls(cfg, customersData)
+    }
+    if (cfg$post_process$plot_closed_calls$run_module){
       plotClosedCalls(cfg, customersData)
     }
   }
