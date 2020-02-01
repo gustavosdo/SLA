@@ -1,36 +1,55 @@
+# Some kind of systematic error to be developed
 
-linearRegressionTickets = function(dataset){
+linearRegressionTickets = function(dataset, day, customer, variable, cfg){
 
-  # Linear regression
-  linReg = linearRegressionF(x = dataset$x, y = dataset$y)
-  a = linReg$coefficients[[1]]
-  b = linReg$coefficients[[2]]
-  a_err = summary(linReg)[4][[1]][[3]]
-  b_err = summary(linReg)[4][[1]][[4]]
+  # Linear regression: frequentist way -----------------------------------------
+  if(cfg$process$frequentist_regression){
+    # Result of linear regression using frequentist method
+    resF = linearRegressionF(x = dataset$x, y = dataset$y)
+    # Unpacking resF parameters
+    for (i in 1:length(resF)) {assign(names(resF)[i], resF[[i]])}
+    # Predict SLA for the given day
+    prediction = round(c0 + an(substr(day, 9, 10))*c1)
+    # Statistical error calculation
+    pred_error = round(sqrt((c0_sd)**2 + (an(substr(day, 9, 10))*c1_sd)**2))
 
-  # Define prediction for day
-  prediction = round(a + an(substr(day, 9, 10))*b)
-
-  # Statistical error calculation
-  pred_error = round(sqrt((a_err)**2 + (an(substr(day, 9, 10))*b_err)**2))
-
-  # Some kind of systematic error (TBD)
-
-  # ticketsPredictions data frame
-  if (!exists("ticketsPredictions")){
-    ticketsPredictions = data.frame(customer = customer,
+    # ticketsPredictions data frame
+    ticketsPredictionsF = data.frame(customer = customer,
                                     variable = variable,
                                     day = day,
                                     value = prediction,
-                                    error = pred_error)
-  } else {
-    ticketsPredictions = rbind(ticketsPredictions,
-                               data.frame(customer = customer,
-                                          variable = variable,
-                                          day = day,
-                                          value = prediction,
-                                          error = pred_error))
-  } # if-else
+                                    error = pred_error,
+                                    method = "frequentist")
+  }
 
+  # Linear regression: bayesian way --------------------------------------------
+  if(cfg$process$bayesian_regression){
+    # Result of linear regression using frequentist method
+    resB = linearRegressionB(x = dataset$x, y = dataset$y, cfg = cfg)
+    # Unpacking resB parameters
+    for (i in 1:length(resB)) {assign(names(resB)[i], resB[[i]])}
+    # Predict SLA for the given day
+    prediction = round(c0 + an(substr(day, 9, 10))*c1)
+    # Statistical error calculation
+    pred_error = round(sqrt((c0_sd)**2 + (an(substr(day, 9, 10))*c1_sd)**2))
+
+    # ticketsPredictions data frame
+    if (exists("ticketsPredictionsF")){
+      ticketsPredictions = rbind(ticketsPredictionsF,
+                                    data.frame(customer = customer,
+                                               variable = variable,
+                                               day = day,
+                                               value = prediction,
+                                               error = pred_error,
+                                               method = "bayesian"))
+    } else {
+      ticketsPredictions = data.frame(customer = customer,
+                                       variable = variable,
+                                       day = day,
+                                       value = prediction,
+                                       error = pred_error,
+                                       method = "bayesian")
+    }
+  }
   return(ticketsPredictions)
 }

@@ -78,32 +78,38 @@ SLA = function(config_json_filename = NULL){
     save(solutions, file = paste0(cfg$folders$processed, 'solutions.RData'))
 
     # Determine accuracy -------------------------------------------------------
-    # customersData without the last two days
-    cfgTest = cfg # Copy the cfg in order to change some parameters harmlessly
-    endTime = substr(x = cfg$pre_process$end_date, start = 12, stop = 19)
-    cfgTest$pre_process$end_date = paste(as.Date(cfg$pre_process$end_date) - 2,
-                                          endTime)
-    cfgTest$process$days_prediction = ac(as.Date(cfg$pre_process$end_date) - 1)
-    customersDataTest = calcSLA(dataset = dataset, cfg = cfgTest)
+    if(cfg$process$accuracy_test){
 
-    # Determine the solution for a shorter time range
-    solutionsTest = predictions(cfg = cfgTest,customersData = customersDataTest)
+      # customersData without the last two days
+      cfgTest = cfg # Copy the cfg in order to change some parameters harmlessly
+      endTime = substr(x = cfg$pre_process$end_date, start = 12, stop = 19)
+      cfgTest$pre_process$end_date = paste(as.Date(cfg$pre_process$end_date)-2,
+                                           endTime)
+      cfgTest$process$days_prediction = ac(as.Date(cfg$pre_process$end_date)-1)
+      customersDataTest = calcSLA(dataset = dataset, cfg = cfgTest)
 
-    # Two accuracy tests
-    accTests = accuracy(customersData = customersData,
-                        solutionsTest = solutionsTest,
-                        dayTest = cfgTest$process$days_prediction,
-                        cfg = cfg)
+      # Determine the solution for a shorter time range
+      solutionsTest = predictions(cfg = cfgTest,
+                                  customersData = customersDataTest)
 
-    # Save the tests results for each day and customer
-    save(accTests, file = paste0(cfg$folders$processed, 'accTests.RData'))
+      # Two accuracy tests
+      accTests = accuracy(customersData = customersData,
+                          solutionsTest = solutionsTest,
+                          dayTest = cfgTest$process$days_prediction,
+                          cfg = cfg)
+
+      # Save the tests results for each day and customer
+      save(accTests, file = paste0(cfg$folders$processed, 'accTests.RData'))
+    }
 
   } else {
     # Load the previously done predictions for each day and customer -----------
     load(file = paste0(cfg$folders$processed, 'solutions.RData'))
 
-    # Load the tests results for each day and customer -------------------------
-    load(file = paste0(cfg$folders$processed, 'accTests.RData'))
+    if(cfg$process$accuracy_test){
+      # Load the tests results for each day and customer -----------------------
+      load(file = paste0(cfg$folders$processed, 'accTests.RData'))
+    }
   }
 
   # Post processing module -----------------------------------------------------

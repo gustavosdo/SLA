@@ -12,7 +12,7 @@
 #'
 #' @import
 
-predictions = function(cfg, customersData, verbose = F){
+predictions = function(cfg, customersData, verbose = T){
 
   # Unpacking customersData ----
   customersData = unlist(customersData, recursive = F)
@@ -72,17 +72,40 @@ predictions = function(cfg, customersData, verbose = F){
 
         # Linear regression ----
         if (cfg$process$linear_regression){
-          # Linear regression module
-          ticketsPredictions = linearRegressionTickets(dataset = iter_data)
-        }
+          # Linear regression modules
+          if (!exists("ticketsPredictions")){
+            ticketsPredictions = linearRegressionTickets(dataset = iter_data,
+                                                         day = day,
+                                                         customer = customer,
+                                                         variable = variable,
+                                                         cfg = cfg)
+          } else {
+            ticketsPredictions = rbind(ticketsPredictions,
+                                        linearRegressionTickets(
+                                          dataset = iter_data,
+                                          day = day,
+                                          customer = customer,
+                                          variable = variable,
+                                          cfg = cfg))
+          } # if-else
+        } # linear regression if
 
         # Polynomial regression ----
-        polyReg = polyRegression(dataset = iter_data,
-                                 degree = cfg$process$poly_degree)
+        if (cfg$process$poly_regression){
+          polyReg = polyRegression(dataset = iter_data,
+                                   degree = cfg$process$poly_degree)
+        }
 
       } # day prediction iteration
     } # var iteration
   } # customer iteration
-  ticketsPredictions = predictSLA(ticketsPredictions = ticketsPredictions)
-  return(ticketsPredictions)
+
+  # Save ticketsPredictions (for debug purpose)
+  # Save the values for each day and customer
+  save(ticketsPredictions,
+       file = paste0(cfg$folders$processed, 'ticketsPredictions.RData'))
+
+  # Predicting SLA for all days defined in JSON
+  SlaPredictions = predictSLA(ticketsPredictions = ticketsPredictions)
+  return(SlaPredictions)
 }

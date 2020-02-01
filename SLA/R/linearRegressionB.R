@@ -6,6 +6,9 @@
 #' probability P({c_n} | data) for c_1 and c_0 parameters using a Markov Chain
 #' Monte Carlo.
 #'
+#' @details Probability density function definitions were first seen at
+#' https://theoreticalecology.wordpress.com/2010/09/17/metropolis-hastings-mcmc-in-r/
+#'
 #' @param x A vector containing the predictor variable
 #' @param y A vector containing the resultant variable
 #'
@@ -13,53 +16,53 @@
 #'
 #' @import reticulate
 
-linearRegressionB = function(x, y){
+linearRegressionB = function(x, y, cfg){
 
-  # summary statistics of sample
-  n    = length(x)
-  ybar = mean(y)
-  s2   = mean(x**2) - mean(x)**2
+  # Mean values of parameters from frequesntist linear regression --------------
+  resF = linearRegressionF(x, y)
+  # Unpacking resF variables
+  for (i in 1:length(resF)) {assign(names(resF)[i], resF[[i]])}
 
-  # sample from the joint posterior (mu, tau | data)
-  mu     = rep(NA, 11000)
-  tau    = rep(NA, 11000)
-  T      = 1000    # burnin
-  tau[1] = 1  # initialisation
-  for(i in 2:11000) {
-    mu[i]  = rnorm(n = 1, mean = ybar, sd = sqrt(1 / (n * tau[i - 1])))
-    tau[i] = rgamma(n = 1, shape = n / 2, scale = 2 / ((n - 1) * s2 + n * (mu[i] - ybar)^2))
-  }
-  mu  = mu[-(1:T)]   # remove burnin
-  tau = tau[-(1:T)] # remove burnin
+  # Markov chain execution -----------------------------------------------------
+  startValues = c(runif(n = 1, min = -200, max = 200),
+                  runif(n = 1, min = -200, max = 200),
+                  #runif(n = 1, min = c0 - c0_sd, max = c0 + c0_sd),
+                  #runif(n = 1, min = c1 - c1_sd, max = c1 + c1_sd),
+                  runif(n = 1, min = 0, cfg$process$bayes_sd))
+  chain = MCMC(cfg = cfg,
+               x = x, y = y,
+               startValues = startValues,
+               iters = cfg$process$bayes_nsteps,
+               c0_sd = c0_sd,
+               c1_sd = c1_sd,
+               sd = cfg$process$bayes_sd)
 
-  # # Frequentist linear regression ----------------------------------------------
-  # resF = linearRegressionF(x, y)
-  # # Unpacking results
-  # c0_mean = resF$c0; c0_sd = resF$c0_sd
-  # c1_mean = resF$c1; c1_sd = resF$c1_sd
-  # var = resF$Chi2NDOF
-  #
-  # # Bayesian linear regression -------------------------------------------------
-  # # Prior distributions based on frequentist result
-  # c0 = dnorm(x = seq(from = c0_mean - 3 * c0_sd,
-  #                    to = c0_mean + 3 * c0_sd,
-  #                    by = 6*c0_sd/cfg$process$bayes_nsteps),
-  #            mean = c0_mean,
-  #            sd = c0_sd)
-  # c1 = dnorm(x = seq(from = c1_mean - 3 * c1_sd,
-  #                    to = c1_mean + 3 * c1_sd,
-  #                    by = 6*c1_sd/cfg$process$bayes_nsteps),
-  #            mean = c1_mean,
-  #            sd = c1_sd)
-  # sd_range_max = max(c1_mean + 3 * c1_sd, c0_mean + 3 * c0_sd)
-  # sd = dnorm(x = seq(from = 0,
-  #                    to = sd_range_max,
-  #                    by = sd_range_max/cfg$process$bayes_nsteps),
-  #            mean = 0,
-  #            sd = sqrt(var))
-  # # Linear regression
-  # c1_pdfs = lapply(x, function(xi){xi*c1})
-  # c0_pdfs = lapply(x, function(xi){c0})
-  # mean = lapply(1:length(x), function(i){c0_pdfs[[i]] + c1_pdfs[[i]]})
+  # Removing initial random entries
+  chain = chain[-(1:cfg$process$mcmc_burnin),]
+  # Optimal value of acceptance is from 20% to 30%
+  acceptance = 1 - mean(duplicated(chain))
+
+  # Parameters and its errors --------------------------------------------------
+  c0 = mean(chain[,1]); c0_sd = sd(chain[,1])
+  c1 = mean(chain[,2]); c1_sd = sd(chain[,2])
+  f = function(c0, c1, x){return(c0 + c1*x)}
+
+  # Calculating R²
+  # Sum of squares of residuals
+  SSres = sum((f(c0,c1,x) - y)**2)
+  # Total sum of squares
+  SStot = sum((y - mean(y))**2)
+  # R-square
+  R2 = 1 - SSres/SStot
+  # Chi2 per number of degrees of freedom
+  Chi2NDOF = SSres/(length(x)-2)
+
+  # Return values of parameters ------------------------------------------------
+  return(list(c0 = c0,
+              c0_sd = c0_sd,
+              c1 = c1,
+              c1_sd = c1_sd,
+              R2 = R2,
+              Chi2NDOF = Chi2NDOF))
 
 }

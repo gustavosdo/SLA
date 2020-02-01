@@ -6,7 +6,7 @@
     "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/"
   },
   "pre_process": {
-    "run_preprocess": true,
+    "run_preprocess": false,
     "filename": "ticket_cientista.csv",
     "exist_header": true,
     "separator": ";",
@@ -24,17 +24,21 @@
   },
   "process":{
     "run_process": true,
-    "customers": null,
-	  "days_prediction": ["2019-02-27", "2019-02-28"],
+    "customers": ["215", "3363", "2581"],
+	  "days_prediction": ["2019-02-27"],
 	  "linear_regression": true,
+	  "frequentist_regression": true,
+	  "bayesian_regression": true,
 	  "bayes_sd": 10,
-	  "bayes_nsteps": 50,
+	  "bayes_nsteps": 500000,
+	  "mcmc_burnin": 10000,
 	  "poly_regression": false,
 	  "poly_degree": 5,
-	  "decisiontree_regression": false
+	  "decisiontree_regression": false,
+	  "accuracy_test": false
   },
   "post_process":{
-    "run_postprocess": true,
+    "run_postprocess": false,
     "plot_calls": {
       "run_module": true,
       "axes_names": ["Number of calls", "Calendar"],
