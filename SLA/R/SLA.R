@@ -103,6 +103,9 @@ SLA = function(config_json_filename = NULL){
     }
 
   } else {
+    # Load the tickets for each day and customer -------------------------------
+    load(file = paste0(cfg$folders$processed, 'ticketsPredictions.RData'))
+
     # Load the previously done predictions for each day and customer -----------
     load(file = paste0(cfg$folders$processed, 'solutions.RData'))
 

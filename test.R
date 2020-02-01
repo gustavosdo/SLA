@@ -7,9 +7,11 @@ load_all()
 # Run all the package ----
 config_json_filename = 'SLA_config.json'
 verbose = T
-SLA(config_json_filename)
-# Basic data in order to test ----
 cfg = fromJSON(config_json_filename)
+# Run Full -----
+SLA(config_json_filename)
+
+# Basic data in order to test ----
 dataset = read.csv(file = paste0(cfg$folders$preprocessed, 'preprocessed_', cfg$pre_process$filename),
                    header = cfg$pre_process$exist_header)
 load(file = paste0(cfg$folders$preprocessed, 'customersData.RData'))

@@ -4,6 +4,7 @@ linearRegressionTickets = function(dataset, day, customer, variable, cfg){
 
   # Linear regression: frequentist way -----------------------------------------
   if(cfg$process$frequentist_regression){
+    if(verbose){print("Frequentist linear regressor")}
     # Result of linear regression using frequentist method
     resF = linearRegressionF(x = dataset$x, y = dataset$y)
     # Unpacking resF parameters
@@ -24,6 +25,7 @@ linearRegressionTickets = function(dataset, day, customer, variable, cfg){
 
   # Linear regression: bayesian way --------------------------------------------
   if(cfg$process$bayesian_regression){
+    if(verbose){print("Bayesian linear regressor")}
     # Result of linear regression using frequentist method
     resB = linearRegressionB(x = dataset$x, y = dataset$y, cfg = cfg)
     # Unpacking resB parameters

@@ -7,7 +7,7 @@ predictSLA = function(ticketsPredictions){
                                    == as.Date(iter_day),]
     # Loop over methods
     for (iter_method in unique(ticketsPredictions$method)){
-      method_data = iter_data[ac(iter_data$method) == ac(iter_method)]
+      method_data = iter_data[ac(iter_data$method) == ac(iter_method),]
       # Loop over customers ----
       for (customer in unique(iter_data$customer)){
         customer_data = method_data[ac(method_data$customer) == ac(customer),]
@@ -29,13 +29,13 @@ predictSLA = function(ticketsPredictions){
         if (!exists("Sla")){
           Sla = data.frame(customer = customer,
                            day = iter_day,
-                           method = method,
+                           method = iter_method,
                            value = sla,
                            error = sigma_sla)
         } else {
           Sla = rbind(Sla, data.frame(customer = customer,
                                       day = iter_day,
-                                      method = method,
+                                      method = iter_method,
                                       value = sla,
                                       error = sigma_sla))
         } # if-else

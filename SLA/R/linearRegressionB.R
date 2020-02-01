@@ -24,18 +24,23 @@ linearRegressionB = function(x, y, cfg){
   for (i in 1:length(resF)) {assign(names(resF)[i], resF[[i]])}
 
   # Markov chain execution -----------------------------------------------------
-  startValues = c(runif(n = 1, min = -200, max = 200),
-                  runif(n = 1, min = -200, max = 200),
+  startValues = c(runif(n = 1,
+                        min = -100*cfg$process$bayes_sd,
+                        max = 100*cfg$process$bayes_sd),
+                  runif(n = 1,
+                        min = -100*cfg$process$bayes_sd,
+                        max = 100*cfg$process$bayes_sd),
                   #runif(n = 1, min = c0 - c0_sd, max = c0 + c0_sd),
                   #runif(n = 1, min = c1 - c1_sd, max = c1 + c1_sd),
-                  runif(n = 1, min = 0, cfg$process$bayes_sd))
+                  runif(n = 1,
+                        min = 0,
+                        cfg$process$bayes_sd))
   chain = MCMC(cfg = cfg,
                x = x, y = y,
                startValues = startValues,
                iters = cfg$process$bayes_nsteps,
                c0_sd = c0_sd,
-               c1_sd = c1_sd,
-               sd = cfg$process$bayes_sd)
+               c1_sd = c1_sd)
 
   # Removing initial random entries
   chain = chain[-(1:cfg$process$mcmc_burnin),]
