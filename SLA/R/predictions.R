@@ -1,4 +1,5 @@
-#' @title Preview of number of calls and closed calls based on various algorithms
+#' @title Preview of number of calls and closed calls based on various
+#' algorithms
 #' @name ticketsPredictions
 #'
 #' @description This module receives the all calls and closed calls for a
@@ -72,7 +73,6 @@ predictions = function(cfg, customersData, verbose = T){
 
         # Linear regression ----
         if (cfg$process$linear_regression){
-          # Linear regression modules
           if (!exists("ticketsPredictions")){
             ticketsPredictions = linearRegressionTickets(dataset = iter_data,
                                                          day = day,
@@ -82,33 +82,34 @@ predictions = function(cfg, customersData, verbose = T){
                                                          verbose = verbose)
           } else {
             ticketsPredictions = rbind(ticketsPredictions,
-                                        linearRegressionTickets(
-                                          dataset = iter_data,
-                                          day = day,
-                                          customer = customer,
-                                          variable = variable,
-                                          cfg = cfg,
-                                          verbose = verbose))
+                                       linearRegressionTickets(
+                                         dataset = iter_data,
+                                         day = day,
+                                         customer = customer,
+                                         variable = variable,
+                                         cfg = cfg,
+                                         verbose = verbose))
           } # if-else
         } # linear regression if
 
-        # Polynomial regression ----
+        # Polynomial regression ------------------------------------------------
         if (cfg$process$poly_regression){
           if (!exists("ticketsPredictions")){
-            ticketsPredictions = polyRegression(customer = customer,
-                                                variable = variable,
-                                                dataset = iter_data,
-                                                degree = cfg$process$poly_degree,
-                                                day = day,
-                                                verbose = verbose)
+            ticketsPredictions = polyRegressionTickets(dataset = iter_data,
+                                                         day = day,
+                                                         customer = customer,
+                                                         variable = variable,
+                                                         cfg = cfg,
+                                                         verbose = verbose)
           } else {
             ticketsPredictions = rbind(ticketsPredictions,
-                                       polyRegression(customer = customer,
-                                                      variable = variable,
-                                                      dataset = iter_data,
-                                                      degree = cfg$process$poly_degree,
-                                                      day = day,
-                                                      verbose = verbose))
+                                       polyRegressionTickets(
+                                         dataset = iter_data,
+                                         day = day,
+                                         customer = customer,
+                                         variable = variable,
+                                         cfg = cfg,
+                                         verbose = verbose))
           } # if-else
         } # polynomial regression if
       } # day prediction iteration

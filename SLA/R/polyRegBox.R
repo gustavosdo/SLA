@@ -1,7 +1,7 @@
 
 library(fields)
 
-polyRegression = function(customer, variable, dataset,
+polyRegBox = function(customer, variable, dataset,
                           degree, day, verbose){
 
   if(verbose){print(paste("Polynomial regressor. Degree = ", degree))}
@@ -21,6 +21,6 @@ polyRegression = function(customer, variable, dataset,
                                   day = day,
                                   value = prediction$fit[[1]],
                                   error = prediction$se.fit[[1]],
-                                  method = "polynomial")
+                                  method = paste0("poly_degree_", degree))
   return(ticketsPredictions)
 }
