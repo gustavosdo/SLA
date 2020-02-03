@@ -92,10 +92,25 @@ predictions = function(cfg, customersData, verbose = T){
 
         # Polynomial regression ----
         if (cfg$process$poly_regression){
-          polyReg = polyRegression(dataset = iter_data,
-                                   degree = cfg$process$poly_degree)
-        }
-
+          if (!exists("ticketsPredictions")){
+            ticketsPredictions = polyRegression(customer = customer,
+                                                variable = variable,
+                                                dataset = iter_data,
+                                                degree = cfg$process$poly_degree,
+                                                day = an(substr(x = day,
+                                                                start = 9,
+                                                                stop = 10)))
+          } else {
+            ticketsPredictions = rbind(ticketsPredictions,
+                                       polyRegression(customer = customer,
+                                                      variable = variable,
+                                                      dataset = iter_data,
+                                                      degree = cfg$process$poly_degree,
+                                                      day = an(substr(x = day,
+                                                                      start = 9,
+                                                                      stop = 10))))
+          } # if-else
+        } # polynomial regression if
       } # day prediction iteration
     } # var iteration
   } # customer iteration

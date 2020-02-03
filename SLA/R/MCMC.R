@@ -29,7 +29,7 @@ MCMC = function(cfg, x, y, c0_sd, c1_sd, startValues, iters, verbose = T){
                            c0 = chain[iter, "c0"][[1]],
                            c1 = chain[iter, "c1"][[1]],
                            sd = chain[iter, "sd"][[1]]))
-    if (runif(1) < prob){
+    if (!is.nan(prob) & runif(1) < prob){
       chain[iter+1,] = randomWalk
     }else{
       chain[iter+1,] = chain[iter,]

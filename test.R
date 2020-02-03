@@ -20,3 +20,6 @@ customer = customers[1]
 variable = variables[1]
 day = cfg$process$days_prediction[1]
 day = cfg$process$days_prediction[2]
+# Testing poly regressor ----
+load("../preprocessed/before_poly_regressor.RData")
+
