@@ -1,6 +1,7 @@
 # Some kind of systematic error to be developed
 
-linearRegressionTickets = function(dataset, day, customer, variable, cfg){
+linearRegressionTickets = function(dataset, day, customer,
+                                   variable, cfg, verbose){
 
   # Linear regression: frequentist way -----------------------------------------
   if(cfg$process$frequentist_regression){
@@ -20,7 +21,7 @@ linearRegressionTickets = function(dataset, day, customer, variable, cfg){
                                     day = day,
                                     value = prediction,
                                     error = pred_error,
-                                    method = "frequentist")
+                                    method = "linear_freq")
   }
 
   # Linear regression: bayesian way --------------------------------------------
@@ -43,14 +44,14 @@ linearRegressionTickets = function(dataset, day, customer, variable, cfg){
                                                day = day,
                                                value = prediction,
                                                error = pred_error,
-                                               method = "bayesian"))
+                                               method = "linear_bayes"))
     } else {
       ticketsPredictions = data.frame(customer = customer,
                                        variable = variable,
                                        day = day,
                                        value = prediction,
                                        error = pred_error,
-                                       method = "bayesian")
+                                       method = "linear_bayes")
     }
   }
   return(ticketsPredictions)

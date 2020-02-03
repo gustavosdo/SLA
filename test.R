@@ -6,7 +6,7 @@ library(devtools)
 load_all()
 # Run all the package ----
 config_json_filename = 'SLA_config.json'
-verbose = T
+#verbose = T
 cfg = fromJSON(config_json_filename)
 # Run Full -----
 SLA(config_json_filename)
@@ -22,4 +22,4 @@ day = cfg$process$days_prediction[1]
 day = cfg$process$days_prediction[2]
 # Testing poly regressor ----
 load("../preprocessed/before_poly_regressor.RData")
-
+load(file = paste0(cfg$folders$processed, 'ticketsPredictions.RData'))

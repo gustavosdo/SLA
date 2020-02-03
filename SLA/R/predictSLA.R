@@ -6,10 +6,10 @@ predictSLA = function(ticketsPredictions){
     iter_data = ticketsPredictions[as.Date(ticketsPredictions$day)
                                    == as.Date(iter_day),]
     # Loop over methods
-    for (iter_method in unique(ticketsPredictions$method)){
+    for (iter_method in unique(iter_data$method)){
       method_data = iter_data[ac(iter_data$method) == ac(iter_method),]
       # Loop over customers ----
-      for (customer in unique(iter_data$customer)){
+      for (customer in unique(method_data$customer)){
         customer_data = method_data[ac(method_data$customer) == ac(customer),]
 
         # Calculating SLA and its associated error ----

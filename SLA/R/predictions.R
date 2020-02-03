@@ -78,7 +78,8 @@ predictions = function(cfg, customersData, verbose = T){
                                                          day = day,
                                                          customer = customer,
                                                          variable = variable,
-                                                         cfg = cfg)
+                                                         cfg = cfg,
+                                                         verbose = verbose)
           } else {
             ticketsPredictions = rbind(ticketsPredictions,
                                         linearRegressionTickets(
@@ -86,7 +87,8 @@ predictions = function(cfg, customersData, verbose = T){
                                           day = day,
                                           customer = customer,
                                           variable = variable,
-                                          cfg = cfg))
+                                          cfg = cfg,
+                                          verbose = verbose))
           } # if-else
         } # linear regression if
 
@@ -97,18 +99,16 @@ predictions = function(cfg, customersData, verbose = T){
                                                 variable = variable,
                                                 dataset = iter_data,
                                                 degree = cfg$process$poly_degree,
-                                                day = an(substr(x = day,
-                                                                start = 9,
-                                                                stop = 10)))
+                                                day = day,
+                                                verbose = verbose)
           } else {
             ticketsPredictions = rbind(ticketsPredictions,
                                        polyRegression(customer = customer,
                                                       variable = variable,
                                                       dataset = iter_data,
                                                       degree = cfg$process$poly_degree,
-                                                      day = an(substr(x = day,
-                                                                      start = 9,
-                                                                      stop = 10))))
+                                                      day = day,
+                                                      verbose = verbose))
           } # if-else
         } # polynomial regression if
       } # day prediction iteration
