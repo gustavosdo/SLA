@@ -29,6 +29,9 @@ SLA = function(config_json_filename = NULL){
   # Define and create folders of pre, post and processed files
   setupFolder(cfg = cfg)
 
+  # SQL definitions ------------------------------------------------------------
+  createSQL(cfg = cfg)
+
   # Preprocessing module -------------------------------------------------------
   if (cfg$pre_process$run_preprocess){
 
