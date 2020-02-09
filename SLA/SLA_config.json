@@ -3,7 +3,8 @@
     "input_folder": "/home/luga/Dropbox/Git/SLA/dataset/",
     "preprocessed": "/home/luga/Dropbox/Git/SLA/preprocessed/",
     "processed": "/home/luga/Dropbox/Git/SLA/processed/",
-    "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/"
+    "postprocessed": "/home/luga/Dropbox/Git/SLA/postprocessed/",
+    "database": "/home/luga/Dropbox/Git/SLA/db/"
   },
   "pre_process": {
     "run_preprocess": false,
