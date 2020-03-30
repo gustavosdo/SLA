@@ -30,7 +30,7 @@ SLA = function(config_json_filename = NULL){
   setupFolder(cfg = cfg)
 
   # SQL definitions ------------------------------------------------------------
-  createSQL(cfg = cfg)
+  #createSQL(cfg = cfg)
 
   # Preprocessing module -------------------------------------------------------
   if (cfg$pre_process$run_preprocess){
