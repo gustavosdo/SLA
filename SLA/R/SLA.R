@@ -12,19 +12,10 @@
 #'
 #' @import jsonlite devtools
 
-SLA = function(config_json_filename = NULL){
+SLA = function(config_json_filename = "~/Dropbox/Git/SLA/SLA/R/config.R") {
 
-  # Initial setup --------------------------------------------------------------
-  # Checking the configuration json filename
-  if (is.null(config_json_filename)){
-    stop("Use config_json_filename argument!")
-  }
-  if(!file.exists(config_json_filename)){
-    stop("Use a valid configuration json filename!")
-  }
-
-  # Reading the json config
-  cfg = fromJSON(config_json_filename)
+  # Read configurations file
+  source(config_json_filename)
 
   # Define and create folders of pre, post and processed files
   setupFolder(cfg = cfg)
