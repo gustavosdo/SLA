@@ -8,7 +8,6 @@ cfg = list(
     database = "/home/luga/Dropbox/Git/SLA/db/"
   ),
   pre_process = list(
-    run_preprocess = F,
     filename = "ticket_cientista.csv",
     exist_header = T,
     separator = ";",
@@ -18,14 +17,14 @@ cfg = list(
     format_date = T,
     closed_ticket_col = "callStatus",
     closed_ontime_col = "onTimeSolution",
-    closeDate_col = "closeDateTime",
+    closeDate_col = "callCloseDate",
+    convert_int_to_date = T,
     slaStatus_col = "slaStatus",
     customers_col = "customerCode",
     callNumber_col = "callNumber",
     threads = 7
   ),
   process = list(
-    run_process = T,
     customers = c("215"),
     days_prediction = c("2019-02-27", "2019-02-28", "2019-03-01", "2019-03-02"),
     linear_regression = T,
@@ -44,7 +43,7 @@ cfg = list(
     accuracy_test = F
   ),
   post_process = list(
-    run_postprocess = F,
+    only_postprocess = F,
     plot_calls = list(
       run_module = T,
       axes_names = c("Number of calls", "Calendar"),

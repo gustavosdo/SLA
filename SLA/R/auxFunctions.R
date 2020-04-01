@@ -35,3 +35,19 @@ translateWeekDays = function(weekDays){
 
   return(unlist(lapply(weekDays, function(day){en_days[which(pt_br_days == day)]})))
 }
+
+convertIntToDate = function(date_int, verbose = F) {
+
+  # Returning NA in case a NA was passed as argument
+  if (is.na(date_int)) {
+    if (verbose){message("NA was given as argument! Returning NA")}
+    return(NA)
+  }
+
+  # Expected input: 20180312 (12/Mar/2018)
+  date_str = ac(date_int)
+  year = substr(x = date_str, start = 3, stop = 4)
+  month = substr(x = date_str, start = 5, stop = 6)
+  day = substr(x = date_str, start = 7, stop = 8)
+  return(as.Date(paste(c(year, month, day), collapse = '-')))
+}

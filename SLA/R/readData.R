@@ -22,7 +22,16 @@ readData = function(cfg){
                     cfg$pre_process$customers_col,
                     cfg$pre_process$callNumber_col)
 
-  # Subset the csv with  the relevant data columns and returns it
+  # Subset the csv with the relevant data columns
   dataset = dataset[, names(dataset) %in% c(relevant_cols)]
+
+  # Formating dates column
+  if (cfg$pre_process$convert_int_to_date){
+    for (iter_row in 1:nrow(dataset)){
+      # Something is fucky here
+      dataset[iter_row, cfg$pre_process$closeDate_col] = convertIntToDate(dataset[iter_row, cfg$pre_process$closeDate_col])
+    }
+  }
+
   return(dataset)
 }
