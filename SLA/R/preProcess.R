@@ -1,10 +1,11 @@
+#' @export
 
 preProcess = function(cfg) {
 
-  # Read data
+  # Read raw data --------------------------------------------------------------
   dataset = readData(cfg)
 
-  # Formatting data correctly if needed
+  # Formatting data correctly if required --------------------------------------
   if (cfg$pre_process$format_date){
     dataset = convertDateFromIBM(dataset = dataset, cfg = cfg)
   }
@@ -23,6 +24,5 @@ preProcess = function(cfg) {
 
   # Saving the cfg used
   save(cfg, file = paste0(cfg$folders$preprocessed, 'cfg.RData'))
-
 
 }

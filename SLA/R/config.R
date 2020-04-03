@@ -1,4 +1,4 @@
-# Service Level Agrrement configurations ---------------------------------------
+# Service Level Agreement configurations ---------------------------------------
 cfg = list(
   folders = list(
     input_folder = "/home/luga/Dropbox/Git/SLA/dataset/",
@@ -18,6 +18,7 @@ cfg = list(
     closed_ticket_col = "callStatus",
     closed_ontime_col = "onTimeSolution",
     closeDate_col = "callCloseDate",
+    closeDateTime_col = "closeDateTime",
     convert_int_to_date = T,
     slaStatus_col = "slaStatus",
     customers_col = "customerCode",

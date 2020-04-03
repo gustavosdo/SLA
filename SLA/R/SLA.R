@@ -11,6 +11,8 @@
 #' tables, etc.
 #'
 #' @import jsonlite devtools
+#'
+#' @export
 
 SLA = function(config_json_filename = "~/Dropbox/Git/SLA/SLA/R/config.R") {
 
