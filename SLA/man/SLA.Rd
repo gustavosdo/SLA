@@ -4,15 +4,17 @@
 \alias{SLA}
 \title{Main function}
 \usage{
-SLA(config_json_filename = NULL)
+SLA(config_json_filename = "~/Dropbox/Git/SLA/SLA/R/config.R")
 }
 \arguments{
 \item{config_json_filename}{The json file containing all parameters.}
 }
 \value{
-No value is returned. The parameters define the need of output plots, tables, etc.
+No value is returned. The parameters define the need of output plots,
+tables, etc.
 }
 \description{
 This function is the wrapper of the SLA package.
-The preprocessing, processing and postprocessing modules are called during the execution of this wrapper.
+The preprocessing, processing and postprocessing modules are called during
+the execution of this wrapper.
 }

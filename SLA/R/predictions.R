@@ -11,7 +11,6 @@
 #'
 #' @return solution A vector with the SLA preview
 #'
-#' @import
 
 predictions = function(cfg, customersData, verbose = T){
 

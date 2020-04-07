@@ -1,8 +1,15 @@
+#' @title polyRegBox
+#' @name polyRegBox
+#'
+#' @description Prediction of number of tickets using polynomial regression
+#'
+#' @param customer Unique code associated with the customer
+#'
+#' @return ticketsPredictions A data frame with the number of tickets predicted
+#' per day
+#'
 
-library(fields)
-
-polyRegBox = function(customer, variable, dataset,
-                          degree, day, verbose){
+polyRegBox = function(customer, variable, dataset, degree, day, verbose){
 
   if(verbose){print(paste("Polynomial regressor. Degree = ", degree))}
   # Original data --------------------------------------------------------------

@@ -1,11 +1,11 @@
 # Service Level Agreement configurations ---------------------------------------
 cfg = list(
   folders = list(
-    input_folder = "/home/luga/Dropbox/Git/SLA/dataset/",
-    preprocessed ="/home/luga/Dropbox/Git/SLA/preprocessed/",
-    processed = "/home/luga/Dropbox/Git/SLA/processed/",
-    postprocessed = "/home/luga/Dropbox/Git/SLA/postprocessed/",
-    database = "/home/luga/Dropbox/Git/SLA/db/"
+    input_folder = "D:/Dropbox/Git/SLA/dataset/",
+    preprocessed ="D:/Dropbox/Git/SLA/preprocessed/",
+    processed = "D:/Dropbox/Git/SLA/processed/",
+    postprocessed = "D:/Dropbox/Git/SLA/postprocessed/",
+    database = "D:/Dropbox/Git/SLA/db/"
   ),
   pre_process = list(
     filename = "ticket_cientista.csv",
