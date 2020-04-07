@@ -22,13 +22,12 @@ readData = function(cfg){
                     cfg$pre_process$closeDate_col,
                     cfg$pre_process$slaStatus_col,
                     cfg$pre_process$customers_col,
-                    cfg$pre_process$callNumber_col,
-                    cfg$pre_process$closeDateTime_col)
+                    cfg$pre_process$callNumber_col)
 
   # Subset the csv with the relevant data columns
   dataset = dataset[, names(dataset) %in% c(relevant_cols)]
 
-  # Formating dates column
+  # Converting integer format date to close usual date format (if required by cfg)
   if (cfg$pre_process$convert_int_to_date) {
     dataset[,cfg$pre_process$closeDate_col] = as.Date(paste(dataset[,cfg$pre_process$closeDate_col]), format("%Y%m%d")) }
 

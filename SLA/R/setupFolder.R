@@ -19,4 +19,5 @@ setupFolder = function(cfg){
     if (!dir.exists(iter_dir)) dir.create(iter_dir)
   }
 
+  return(dirs)
 }

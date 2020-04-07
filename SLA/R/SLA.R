@@ -10,7 +10,7 @@
 #' @return No value is returned. The parameters define the need of output plots,
 #' tables, etc.
 #'
-#' @import jsonlite devtools DBI dplyr dbplyr odbc
+#' @import jsonlite devtools
 #'
 #' @export
 

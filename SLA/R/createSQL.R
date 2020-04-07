@@ -8,16 +8,28 @@
 #'
 #' @return A SQL database address (it saves the SQL too)
 #'
-#' @import RSQLite DBI
+#' @import DBI dplyr dbplyr odbc RSQLite
 
 createSQL = function(cfg) {
 
-  # SQL with cfg ---------------------------------------------------------------
-  dbDriver = SQLite()
-  con = dbConnect(dbDriver, ":memory:") #dbname = paste0(cfg$folders$database, "cfg"))
-  dbWriteTable(conn = con, "cfg", 3)
-  dbListTables(con)
+  # Open SQL connection
+  con = dbConnect(RSQLite::SQLite(), ":memory:")
 
-  # Closing connection ---------------------------------------------------------
-  dbDisconnect(con)
+  # Create new table in database
+  dbExecute(con,'
+  create table Parameters (
+  Name int,
+  Value varchar(255)
+  )
+')
+
+  # OLD CODE
+  # # SQL with cfg ---------------------------------------------------------------
+  # dbDriver = SQLite()
+  # con = dbConnect(dbDriver, ":memory:") #dbname = paste0(cfg$folders$database, "cfg"))
+  # dbWriteTable(conn = con, "cfg", 3)
+  # dbListTables(con)
+  #
+  # # Closing connection ---------------------------------------------------------
+  # dbDisconnect(con)
 }
